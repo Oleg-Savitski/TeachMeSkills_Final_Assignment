@@ -55,3 +55,125 @@ Packages:
 - classes for session description
 - classes with utilitarian information
 - exceptions
+
+# Course Project: Financial Document Analysis System
+
+## 🚀 Project Overview
+
+Automated financial document processing system developed in Java, focusing on secure and efficient document analysis.
+
+## 📂 Package Structure
+application 
+├── exception        # Exception handling 
+├── launcher         # Entry points and coordination 
+├── model            # Document models 
+├── security         # Security components 
+├── services         # Business logic 
+│ ├── analyzer       # Document analysis 
+│ ├── authentication # Authentication 
+│ ├── cloud          # Cloud services 
+│ ├── encryption     # Encryption 
+│ ├── logger         # Logging 
+│ ├── parser         # Document parsing 
+│ └── statistic      # Statistics 
+└── utils            # Utilities and constants
+
+## 🎯 Project Purpose
+
+Development of software for automated processing of financial documents, including:
+- Parsing of text files
+- Extracting financial information
+- Statistical analysis of documents
+
+## 🛠️ Technology Stack
+
+- **Language**: Java 21
+- **Libraries**:
+  - Apache Commons
+  - Google ZXing
+  - AWS SDK
+
+## ✨ Key Features
+
+### 1. Document Parsing
+- Support for text files (.txt)
+- Data extraction from receipts, invoices
+- Regular expression parsing
+
+### 2. Security System
+- Two-factor authentication
+- Credential encryption
+- Login validation
+- Secure session management
+
+### 3. Statistical Analysis
+- Document value calculations
+- Report generation
+- Console statistics visualization
+
+## 🔒 Security Highlights
+- Custom encryption mechanism
+- Input validation
+- Authorization attempt restrictions
+
+## 📊 Functional Capabilities
+- Document directory processing
+- Financial document analysis
+- Statistical accounting
+- File-based statistics export
+- Optional cloud storage upload (AWS S3)
+
+## 🏗️ Architectural Principles
+- Modular design
+- Interface-based development
+- Robust error handling
+- Component extensibility
+
+## 🚧 Current Limitations
+- Text file support only
+- Limited document format parsing
+- Hard-coded file paths
+- Basic configuration options
+
+## 🔮 Future Development
+- Expand document format support
+- Enhance parsing mechanisms
+- Improve system configurability
+- Database integration
+
+## 💡 Project Outcomes
+- Secure document processing
+- Statistical tracking system
+- Demonstrated Java application design skills
+
+## 📝 License
+[Choose an appropriate license]
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!
+
+---
+
+**Developed with ❤️ using Java**
+
+MIT License
+
+Copyright (c) 2024 [Oleg Savitski]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
