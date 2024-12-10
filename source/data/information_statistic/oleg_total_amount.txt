@@ -1,0 +1,6 @@
+The total amount Order: 13837,38
+Number of files Order: 8
+The total amount Invoice: 8912,13
+Number of files Invoice: 24
+The total amount Check: 19638,94
+Number of files Check: 12
