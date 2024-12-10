@@ -147,15 +147,6 @@ Development of software for automated processing of financial documents, includi
 - Demonstrated Java application design skills
 
 ## 📝 License
-[Choose an appropriate license]
-
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome!
-
----
-
-**Developed with ❤️ using Java**
-
 MIT License
 
 Copyright (c) 2024 [Oleg Savitski]
@@ -177,3 +168,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!
+
+---
+
+**Developed with ❤️ using Java**
