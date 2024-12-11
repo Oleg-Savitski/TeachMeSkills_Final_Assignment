@@ -64,17 +64,19 @@ public class LoggerService implements ILogger, AutoCloseable {
     public LoggerService(String logFormat) {
         this.logFormat = logFormat;
         this.logQueue = new LinkedBlockingQueue<>(1000);
-        this.logExecutor = Executors.newSingleThreadExecutor(r -> {
-            Thread thread = new Thread(r);
-            thread.setDaemon(true);
-            thread.setName("async-logger-thread");
-            return thread;
-        });
+        this.logExecutor = Executors.newSingleThreadExecutor(this::createLoggerThread);
         this.formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
                 .withZone(ZoneId.of("Europe/Moscow"));
 
         createLogDirectory();
         startAsyncLogger();
+    }
+
+    private Thread createLoggerThread(Runnable r) {
+        Thread thread = new Thread(r);
+        thread.setDaemon(true);
+        thread.setName("async-logger-thread");
+        return thread;
     }
 
     private void createLogDirectory() {
@@ -93,7 +95,6 @@ public class LoggerService implements ILogger, AutoCloseable {
                     writeLogToFile(logEntry);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
-                    break;
                 }
             }
         });
@@ -102,26 +103,24 @@ public class LoggerService implements ILogger, AutoCloseable {
     private void writeLogToFile(LogEntry entry) {
         try {
             Path logPath = Paths.get(entry.logPath());
-
-            Files.writeString(
-                    logPath,
-                    entry.formattedMessage() + System.lineSeparator(),
-                    StandardCharsets.UTF_8,
-                    StandardOpenOption.CREATE,
-                    StandardOpenOption.APPEND
-            );
+            writeMessageToFile(logPath, entry.formattedMessage());
 
             if (entry.isError() && entry.stackTrace() != null) {
-                Files.writeString(
-                        logPath,
-                        entry.stackTrace() + System.lineSeparator(),
-                        StandardCharsets.UTF_8,
-                        StandardOpenOption.APPEND
-                );
+                writeMessageToFile(logPath, entry.stackTrace());
             }
         } catch (IOException e) {
             System.err.println("Log writing error: " + e.getMessage());
         }
+    }
+
+    private void writeMessageToFile(Path logPath, String message) throws IOException {
+        Files.writeString(
+                logPath,
+                message + System.lineSeparator(),
+                StandardCharsets.UTF_8,
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND
+        );
     }
 
     @Override
@@ -129,40 +128,14 @@ public class LoggerService implements ILogger, AutoCloseable {
         queueLog(ANSI_INFO + "Info" + ANSI_RESET, message, INFO_LOG_PATH, false, null);
     }
 
-    private String extractErrorLocation(StackTraceElement[] stackTrace) {
-        if (stackTrace == null || stackTrace.length == 0) {
-            return "Unknown location";
-        }
-
-        StackTraceElement caller = stackTrace.length > 1
-                ? stackTrace[1]
-                : stackTrace[0];
-
-        return String.format(
-                "%s.%s (Line: %d)",
-                caller.getClassName(),
-                caller.getMethodName(),
-                caller.getLineNumber()
-        );
+    @Override
+    public void logWarning(String message) {
+        queueLog(ANSI_WARNING + "Warning" + ANSI_RESET, message, WARNING_LOG_PATH, false, null);
     }
 
     @Override
     public void logError(String message) {
-        String errorLocation = extractErrorLocation(Thread.currentThread().getStackTrace());
-
-        String detailedMessage = String.format(
-                "%s | Location: %s",
-                message,
-                errorLocation
-        );
-
-        queueLog(
-                ANSI_ERROR + "Error" + ANSI_RESET,
-                detailedMessage,
-                ERROR_LOG_PATH,
-                true,
-                null
-        );
+        logError(message, null);
     }
 
     public void logError(String message, Throwable throwable) {
@@ -171,50 +144,51 @@ public class LoggerService implements ILogger, AutoCloseable {
                 : Thread.currentThread().getStackTrace();
 
         String errorLocation = extractErrorLocation(stackTrace);
-
         String fullStackTrace = null;
         String errorMessage = message;
 
         if (throwable != null) {
-            StringWriter stringWriter = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(stringWriter);
-            throwable.printStackTrace(printWriter);
-            fullStackTrace = stringWriter.toString();
-
-            errorMessage = String.format(
-                    "%s - %s",
-                    message,
-                    throwable.getMessage() != null ? throwable.getMessage() : "No additional details"
-            );
+            try {
+                fullStackTrace = getStackTraceAsString(throwable);
+            } catch (Exception e) {
+                System.err.println("Failed to get stack trace: " + e.getMessage());
+            }
+            errorMessage = String.format("%s - %s", message, throwable.getMessage() != null ? throwable.getMessage() : "No additional details");
         }
 
-        String detailedMessage = String.format(
-                "%s | Location: %s",
-                errorMessage,
-                errorLocation
-        );
-
-        queueLog(
-                ANSI_ERROR + "Error" + ANSI_RESET,
-                detailedMessage,
-                ERROR_LOG_PATH,
-                true,
-                fullStackTrace
-        );
+        String detailedMessage = String.format("%s | Location: %s", errorMessage, errorLocation);
+        queueLog(ANSI_ERROR + "Error" + ANSI_RESET, detailedMessage, ERROR_LOG_PATH, true, fullStackTrace);
     }
 
-    @Override
-    public void logWarning(String message) {
-        queueLog(ANSI_WARNING + "Warning" + ANSI_RESET, message, WARNING_LOG_PATH, false, null);
+    private String getStackTraceAsString(Throwable throwable) {
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(stringWriter);
+        throwable.printStackTrace(printWriter);
+        return stringWriter.toString();
+    }
+
+    private String extractErrorLocation(StackTraceElement[] stackTrace) {
+        if (stackTrace == null || stackTrace.length == 0) {
+            return "Unknown location";
+        }
+
+        StackTraceElement caller = stackTrace.length > 1 ? stackTrace[1] : stackTrace[0];
+        return String.format("%s.%s (Line: %d)", caller.getClassName(), caller.getMethodName(), caller.getLineNumber());
     }
 
     private void queueLog(String level, String message, String logPath, boolean isError, String stackTrace) {
-        String formattedMessage = String.format(
-                logFormat,
-                LocalDateTime.now().format(formatter),
-                level.replace(ANSI_INFO, "").replace(ANSI_ERROR, "").replace(ANSI_WARNING, "").replace(ANSI_RESET, ""),
-                message
-        );
+        String formattedMessage;
+        try {
+            formattedMessage = String.format(
+                    logFormat,
+                    LocalDateTime.now().format(formatter),
+                    level.replace(ANSI_INFO, "").replace(ANSI_ERROR, "").replace(ANSI_WARNING, "").replace(ANSI_RESET, ""),
+                    message
+            );
+        } catch (Exception e) {
+            System.err.println("Failed to format log message: " + e.getMessage());
+            return;
+        }
 
         try {
             boolean offered = logQueue.offer(new LogEntry(formattedMessage, logPath, isError, stackTrace));
@@ -233,7 +207,7 @@ public class LoggerService implements ILogger, AutoCloseable {
             if (!logExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
                 logExecutor.shutdownNow();
             }
-        } catch ( InterruptedException e) {
+        } catch (InterruptedException e) {
             logExecutor.shutdownNow();
         }
     }

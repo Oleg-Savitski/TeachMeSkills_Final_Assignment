@@ -2,7 +2,6 @@ package com.teachmeskills.application.launcher;
 
 import com.teachmeskills.application.launcher.core.AuthenticationGateway;
 import com.teachmeskills.application.launcher.core.DocumentAnalysisCoordinator;
-import com.teachmeskills.application.services.logger.impl.LoggerService;
 import com.teachmeskills.application.utils.config.ConfigurationLoader;
 
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
@@ -15,17 +14,15 @@ import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LO
  * - Provides robust error handling
 
  * Key Responsibilities:
- * - Initialize logging service
  * - Coordinate document analysis process
  * - Manage application lifecycle
  * - Handle critical exceptions
 
  * Workflow Overview:
- * 1. Initialize logging
- * 2. Create document analysis coordinator
- * 3. Execute document analysis
- * 4. Handle potential exceptions
- * 5. Perform cleanup operations
+ * 1. Create document analysis coordinator
+ * 2. Execute document analysis
+ * 3. Handle potential exceptions
+ * 4. Perform cleanup operations
 
  * Error Handling Strategy:
  * - Centralized exception management
@@ -52,15 +49,13 @@ import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LO
  * - Try-with-resources
  *
  * @author [Oleg Savitski]
- * @version 1.0
+ * @version 1.1
  * @since [01.12.2024]
  */
 public class FinancialAnalysisLauncher {
     public static void main(String[] args) {
-        final LoggerService logger = new LoggerService();
-        try (logger) {
+        try {
             DocumentAnalysisCoordinator manager = new DocumentAnalysisCoordinator();
-
             manager.executeDocumentAnalysis();
         } catch (Exception e) {
             System.out.println("\nAn unexpected malfunction of the application.. Contact the administrator.");
