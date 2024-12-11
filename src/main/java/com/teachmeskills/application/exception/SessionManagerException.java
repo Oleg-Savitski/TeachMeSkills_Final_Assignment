@@ -50,7 +50,7 @@ public class SessionManagerException extends Exception {
   public enum Type {
     TOKEN_GENERATION_ERROR,
     INVALID_TOKEN,
-    EXPIRATION_DATE_ERROR
+    EXPIRATION_DATE_ERROR,
   }
 
   private static final Map<Type, String> errorMessages = new HashMap<>();

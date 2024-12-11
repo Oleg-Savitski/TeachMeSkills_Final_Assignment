@@ -105,9 +105,14 @@ public class AuthenticationService {
                         ("The two-factor authentication code cannot be empty!"));
             }
 
-            if (!TwoFactorAuthentication.getTOTPCode(authenticatedUserData.getSecretKey()).equals(otpCode)) {
-                ILogger.logWarning("Invalid OTP code for user: " + username);
-                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS);
+            try {
+                if (!TwoFactorAuthentication.getTOTPCode(authenticatedUserData.getSecretKey()).equals(otpCode)) {
+                    ILogger.logWarning("Invalid OTP code for user: " + username);
+                    throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS);
+                }
+            } catch (Exception e) {
+                ILogger.logError("Error validating OTP for user: " + username + " - " + e.getMessage());
+                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, e);
             }
         }
 
@@ -115,14 +120,19 @@ public class AuthenticationService {
     }
 
     private void validateInputs(String username, String passcode) throws AuthenticationException {
-        if (username == null || username.trim().isEmpty()) {
-            ILogger.logWarning("Username is empty or null");
-            throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, new IllegalArgumentException("Имя пользователя не может быть пустым"));
-        }
+        try {
+            if (username == null || username.trim().isEmpty()) {
+                ILogger.logWarning("Username is empty or null");
+                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, new IllegalArgumentException("Имя пользователя не может быть пустым"));
+            }
 
-        if (passcode == null || passcode.isEmpty()) {
-            ILogger.logWarning("Passcode is empty or null");
-            throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, new IllegalArgumentException("Пароль не может быть пустым"));
+            if (passcode == null || passcode.isEmpty()) {
+                ILogger.logWarning("Passcode is empty or null");
+                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, new IllegalArgumentException("Пароль не может быть пустым"));
+            }
+        } catch (Exception e) {
+            ILogger.logError("Error validating inputs for user: " + username + " - " + e.getMessage());
+            throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, e);
         }
     }
 
@@ -147,14 +157,23 @@ public class AuthenticationService {
         ILogger.logInfo("Authentication is successful for the user: " + username);
         Map<String, Object> sessionInfo = new HashMap<>();
 
-        String token = sessionManager.getAccessToken();
-        Date expDate = sessionManager.getExpirationDate();
+        try {
+            String token = sessionManager.getAccessToken();
+            Date expDate = sessionManager.getExpirationDate();
 
-        authenticatedUserData.setAccessToken(token);
-        authenticatedUserData.setExpirationDate(expDate);
+            authenticatedUserData.setAccessToken(token);
+            authenticatedUserData.setExpirationDate(expDate);
 
-        sessionInfo.put("accessToken", token);
-        sessionInfo.put("expirationDate", expDate);
+            sessionInfo.put("accessToken", token);
+            sessionInfo.put("expirationDate", expDate);
+        } catch (Exception e) {
+            ILogger.logError("Error creating session for user: " + username + " - " + e.getMessage());
+            try {
+                throw new AuthenticationException(AuthenticationException.Type.SESSION_CREATION_ERROR, e);
+            } catch (AuthenticationException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
 
         return sessionInfo;
     }

@@ -49,7 +49,9 @@ public class AuthenticationException extends AppException {
   public enum Type {
     INVALID_CREDENTIALS,
     DECRYPTION_ERROR,
-    AUTHENTICATION_FAILED
+    AUTHENTICATION_FAILED,
+    SESSION_CREATION_ERROR,
+
   }
 
   private static final Map<Type, String> errorMessages = new HashMap<>();
@@ -58,6 +60,7 @@ public class AuthenticationException extends AppException {
     errorMessages.put(Type.INVALID_CREDENTIALS, "Invalid credentials!");
     errorMessages.put(Type.DECRYPTION_ERROR, "Decryption error!");
     errorMessages.put(Type.AUTHENTICATION_FAILED, "Authentication failed!");
+    errorMessages.put(Type.SESSION_CREATION_ERROR, "Unexpected error in session creation!");
   }
 
   private final Type type;
