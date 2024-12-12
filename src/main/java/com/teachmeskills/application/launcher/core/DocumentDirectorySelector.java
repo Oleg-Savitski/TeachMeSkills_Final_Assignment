@@ -5,63 +5,62 @@ import java.io.File;
 import static com.teachmeskills.application.launcher.core.AuthenticationGateway.scanner;
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Manages the process of selecting a valid document directory for analysis.
+ * The DocumentDirectorySelector class provides a method to prompt the user
+ * to select a valid directory path for document storage. It performs validation
+ * and ensures the specified directory meets necessary requirements such as
+ * existence, being a directory, and having read permissions.
 
- * Core Responsibilities:
- * - Prompt user for document directory path
- * - Validate directory accessibility
- * - Ensure secure and correct directory selection
+ * Responsibilities:
+ * - Prompts the user for a document directory path through console input.
+ * - Validates the provided directory path for existence, type, and permissions.
+ * - Limits the number of attempts to select a valid directory path.
+ * - Logs the selected directory path upon successful selection.
+ * - Throws an exception if the user exceeds the maximum number of attempts.
 
- * User Interaction Workflow:
- * 1. Request directory path from user
- * 2. Validate directory existence
- * 3. Check directory readability
- * 4. Log successful selection
-
- * Validation Criteria:
- * - Directory must exist
- * - Must be a valid directory
- * - Must have read permissions
+ * Features:
+ * - Console-based interactive directory selection.
+ * - Input validation:
+ *   - Ensures the specified path exists.
+ *   - Ensures the specified path is a directory.
+ *   - Ensures the directory has the necessary read permissions.
+ * - Configurable number of user attempts.
 
  * Error Handling:
- * - Continuous prompting until valid directory selected
- * - User-friendly error messages
+ * - Provides descriptive error messages for incorrect or invalid input.
+ * - Limits the number of retries to prevent indefinite user input.
+ * - Throws an IllegalStateException when the maximum number of attempts is exceeded.
 
- * Design Characteristics:
- * - Interactive console-based selection
- * - Robust input validation
- * - Secure directory access check
-
- * Example Usage:
- * <pre>
- * // Interactively select document directory
- * String documentPath = DocumentDirectorySelector.promptForDocumentDirectory();
- * </pre>
- *
- * Integration Scenarios:
- * - Document management systems
- * - File processing applications
- * - Batch document analysis
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [01.12.2024]
+ * Logging:
+ * - Logs information when a valid directory is successfully selected.
  */
 
 public class DocumentDirectorySelector {
+    private static final int MAX_ATTEMPTS = 5;
+
     public static String promptForDocumentDirectory() {
-        while (true) {
+        int attempts = 0;
+
+        while (attempts < MAX_ATTEMPTS) {
             System.out.print("\nThe PATH to the document folder -> ");
             String folderPath = scanner.nextLine().trim();
             File folder = new File(folderPath);
 
-            if (folder.exists() && folder.isDirectory() && folder.canRead()) {
+            if (!folder.exists()) {
+                System.out.println("Error: The specified path does not exist. Please enter a valid path.");
+            } else if (!folder.isDirectory()) {
+                System.out.println("Error: The specified path is not a directory. Please enter a valid directory path.");
+            } else if (!folder.canRead()) {
+                System.out.println("Error: The specified directory cannot be accessed. Check the permissions.");
+            } else {
                 I_LOGGER.logInfo("A directory has been selected -> " + folderPath);
                 System.out.println("\nA directory has been selected -> " + folderPath);
                 return folderPath;
-            } else {
-                System.out.println("The specified path is not a directory.. Try again.");
             }
+
+            attempts++;
+            System.out.println("Remaining attempts: " + (MAX_ATTEMPTS - attempts));
         }
+
+        throw new IllegalStateException("Maximum number of attempts exceeded. Unable to select a valid directory.");
     }
 }
