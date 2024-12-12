@@ -8,50 +8,30 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 /**
- * Comprehensive statistics tracking and reporting service for invalid files.
+ * The {@code InvalidFileStats} class is responsible for maintaining statistics
+ * related to invalid files encountered during processing. It tracks the reasons
+ * why files are invalid and supports reporting this data in various formats.
 
  * Key Features:
- * - Tracks invalid files by specific reasons
- * - Generates detailed console and file reports
- * - Provides percentage breakdown of invalid files
+ * - Records invalid files along with their associated reasons.
+ * - Maintains a count of the total invalid files.
+ * - Provides detailed reporting of invalid file statistics, including file details
+ *   and percentage breakdown by reason.
+ * - Supports exporting the invalid file report to an external file.
 
- * Invalid File Tracking:
- * - Supports multiple invalid file reasons via {@link InvalidReason} enum
- * - Maintains a count and list of files for each invalid reason
+ * Thread Safety:
+ * - All methods that modify or access shared state are synchronized to ensure
+ *   thread safety in multi-threaded environments.
 
- * Reporting Capabilities:
- * - Console reporting
- * - File export of invalid file statistics
- * - Percentage analysis of file invalidity
+ * Usage Scenarios:
+ * - Tracking and analyzing invalid files during batch processing or document parsing.
+ * - Providing detailed logs and statistical breakdowns for debugging or auditing purposes.
 
- * Supported Invalid Reasons:
- * - Empty files
- * - Incorrect year
- * - Wrong file extension
- * - Parsing errors
- * - Incorrect content
-
- * Usage Examples:
- * <pre>
- * InvalidFileStats stats = new InvalidFileStats();
- * stats.recordInvalidFile(InvalidReason.EMPTY_FILE, "document.txt");
- * stats.generateDetailedReport();
- * stats.exportReportToFile("invalid_files_report.txt");
- * </pre>
- *
- * Design Principles:
- * - Thread-safe enum map for storing statistics
- * - Flexible and extensible invalid reason tracking
- * - Detailed reporting mechanism
-
- * Potential Improvements:
- * - Add logging integration
- * - Support for custom report formats
- * - Performance optimization for large file sets
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [21.11.2024]
+ * Design Considerations:
+ * - Uses {@link EnumMap} to efficiently store and retrieve invalid file reasons.
+ * - Relies on the {@link InvalidReason} enumeration to define the possible reasons
+ *   for file invalidity.
+ * - Exceptions are used to validate input and ensure proper usage.
  */
 public class InvalidFileStats {
 
@@ -66,26 +46,36 @@ public class InvalidFileStats {
     private final Map<InvalidReason, List<String>> invalidFileStats = new EnumMap<>(InvalidReason.class);
     private int totalInvalidFiles = 0;
 
-    public void recordInvalidFile(InvalidReason reason, String fileName) {
+    public synchronized void recordInvalidFile(InvalidReason reason, String fileName) {
+        if (reason == null || fileName == null || fileName.isEmpty()) {
+            throw new IllegalArgumentException("Invalid reason or file name provided");
+        }
         invalidFileStats.computeIfAbsent(reason, k -> new ArrayList<>()).add(fileName);
         totalInvalidFiles++;
     }
 
-    public void generateDetailedReport() {
+    public synchronized void generateDetailedReport() {
         System.out.println("\n==== DETAILED REPORT ON INVALID FILES ====");
         System.out.println("The total number of invalid files: " + totalInvalidFiles);
 
         invalidFileStats.forEach((reason, files) -> {
             System.out.println("\n" + reason + ":");
             System.out.println("Number of files: " + files.size());
-            System.out.println("Files:");
-            files.forEach(file -> System.out.println(" - " + file));
+            if (!files.isEmpty()) {
+                System.out.println("Files:");
+                files.forEach(file -> System.out.println(" - " + file));
+            }
         });
 
         generatePercentageBreakdown();
     }
 
-    private void generatePercentageBreakdown() {
+    private synchronized void generatePercentageBreakdown() {
+        if (totalInvalidFiles == 0) {
+            System.out.println("\nNo invalid files to analyze.");
+            return;
+        }
+
         StringBuilder report = new StringBuilder();
 
         report.append("\n==================== ANALYSIS OF INVALID FILES ====================\n");
@@ -112,7 +102,7 @@ public class InvalidFileStats {
         System.out.println(report);
     }
 
-    public void exportReportToFile(String filePath) {
+    public synchronized void exportReportToFile(String filePath) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             writer.println("Detailed report on invalid files");
             writer.println("The total number of invalid files: " + totalInvalidFiles);

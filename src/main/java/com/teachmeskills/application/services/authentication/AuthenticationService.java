@@ -13,125 +13,115 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 /**
- * Authentication service with robust user authentication capabilities, including support for two-factor authentication (2FA).
+ * Service class responsible for handling user authentication logic,
+ * including credential validation and session management.
 
- * Key Features:
- * - Secure credential verification
- * - Support for two-factor authentication (2FA)
- * - Encryption and decryption of passwords
- * - User session management
+ * Core Responsibilities:
+ * - Verify user credentials (username and password).
+ * - Handle two-factor authentication (OTP) validation when enabled.
+ * - Manage creation of user authentication sessions.
+ * - Log all authentication-related actions.
+ * - Decrypt sensitive user data as part of the authentication process.
 
- * Main Functionalities:
- * - Username and password validation
- * - OTP code validation
- * - Session token creation
- * - Authentication error handling
+ * Dependencies:
+ * - {@code AuthenticatedUserData}: Contains encrypted user credentials and session state.
+ * - {@code IEncryption}: Utility for encrypting and decrypting sensitive data.
+ * - {@code ILogger}: Logging interface for tracking authentication operations.
+ * - {@code SessionManager}: Utility for handling session tokens and expiration details.
 
- * Use Cases:
- * - User login
- * - Protecting access to critical resources
- * - Multi-factor authentication
+ * Features:
+ * - Supports authentication with and without OTP depending on user settings.
+ * - Validates username and password by comparing against securely stored values.
+ * - Supports logging for both successful and failed login attempts.
+ * - Detects and handles invalid input parameters such as empty or null values.
+ * - Generates and returns authentication session details upon successful login.
 
- * Security Mechanisms:
- * - Encryption of stored credentials
- * - Input integrity checks
- * - Protection against brute-force attacks
- * - Logging of login attempts
+ * Exception Handling:
+ * - Throws {@code AuthenticationException} for various failure scenarios, including:
+ *   - Invalid credentials (username or password mismatch).
+ *   - Decryption errors during password validation.
+ *   - Invalid OTP for two-factor authentication.
+ *   - Issues with session token generation.
 
- * Example Usage:
- * <pre>
- * AuthenticationService authService = new AuthenticationService(
- *     userData, encryptionService, logger
- * );
- *
- * try {
- *     Map<String, Object> session = authService.authenticateUser WithoutOtp(
- *         "username", "password", "otpCode"
- *     );
- * } catch (AuthenticationException e) {
- *     // Handle authentication errors
- * }
- * </pre>
- *
- * Error Handling:
- * - Generation of AuthenticationException
- * - Detailed error logging
- * - Classification of error types
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [20.11.2024]
+ * Thread Safety:
+ * - Not inherently thread-safe. Instances of this class should be used with caution in a multithreaded environment to avoid inconsistent state.
+
+ * Authentication Flow:
+ * - Validate input parameters (username and password).
+ * - Decrypt stored credentials and verify against the provided input.
+ * - If OTP is enabled, validate the provided OTP using the user's secret key.
+ * - Generate a new session token and expiration date on successful authentication.
  */
 public class AuthenticationService {
 
     private final AuthenticatedUserData authenticatedUserData;
-    private final IEncryption IEncryptionService;
-    private final ILogger ILogger;
+    private final IEncryption encryptionService;
+    private final ILogger logger;
     private final SessionManager sessionManager;
 
-    public AuthenticationService(AuthenticatedUserData authenticatedUserData, IEncryption IEncryptionService, ILogger ILogger) {
-        this.authenticatedUserData = Objects.requireNonNull(authenticatedUserData, "User  Storage cannot be null!");
-        this.IEncryptionService = Objects.requireNonNull(IEncryptionService, "EncryptionService cannot be null!");
-        this.ILogger = Objects.requireNonNull(ILogger, "Logger cannot be null!");
+    public AuthenticationService(AuthenticatedUserData authenticatedUserData, IEncryption encryptionService, ILogger logger) {
+        this.authenticatedUserData = Objects.requireNonNull(authenticatedUserData, "User Storage cannot be null!");
+        this.encryptionService = Objects.requireNonNull(encryptionService, "EncryptionService cannot be null!");
+        this.logger = Objects.requireNonNull(logger, "Logger cannot be null!");
         this.sessionManager = new SessionManager();
     }
 
+    public Map<String, Object> authenticateUserWithoutOtp(String username, String passcode) throws AuthenticationException {
+        return authenticateUserWithoutOtp(username, passcode, null);
+    }
+
     public Map<String, Object> authenticateUserWithoutOtp(String username, String passcode, String otpCode) throws AuthenticationException {
-        ILogger.logInfo("Processing the authentication request for user: " + username);
+        logger.logInfo("Processing the authentication request for user: " + username);
 
         validateInputs(username, passcode);
 
         String storedUsername = authenticatedUserData.getEncryptedUsername();
         String storedEncryptedPassword = authenticatedUserData.getEncryptedPassword();
 
-        ILogger.logInfo("Verification of credentials for user: " + username);
+        logger.logInfo("Verification of credentials for user: " + username);
 
         if (!isValidUsername(username, storedUsername)) {
-            ILogger.logWarning("Invalid username attempt for user: " + username);
-            throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS);
+            logAndThrowInvalidCredentials("Invalid username attempt for user: " + username);
         }
 
         String decryptedPassword = decryptPassword(storedEncryptedPassword);
 
         if (!isValidPassword(passcode, decryptedPassword)) {
-            ILogger.logWarning("Invalid password attempt for user: " + username);
-            throw new AuthenticationException(AuthenticationException.Type.AUTHENTICATION_FAILED);
+            logAndThrowAuthenticationFailed("Invalid password attempt for user: " + username);
         }
 
         if (authenticatedUserData.isOtpEnabled()) {
-            if (otpCode == null || otpCode.trim().isEmpty()) {
-                ILogger.logWarning("OTP code is null or empty for user: " + username);
-                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, new IllegalArgumentException
-                        ("The two-factor authentication code cannot be empty!"));
-            }
-
-            try {
-                if (!TwoFactorAuthentication.getTOTPCode(authenticatedUserData.getSecretKey()).equals(otpCode)) {
-                    ILogger.logWarning("Invalid OTP code for user: " + username);
-                    throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS);
-                }
-            } catch (Exception e) {
-                ILogger.logError("Error validating OTP for user: " + username + " - " + e.getMessage());
-                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, e);
-            }
+            validateOtp(otpCode, username);
         }
 
         return createSuccessfulAuthenticationSession(username);
     }
 
     private void validateInputs(String username, String passcode) throws AuthenticationException {
-        try {
-            if (username == null || username.trim().isEmpty()) {
-                ILogger.logWarning("Username is empty or null");
-                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, new IllegalArgumentException("Имя пользователя не может быть пустым"));
-            }
+        if (username == null || username.trim().isEmpty()) {
+            logAndThrowInvalidCredentials("Username is empty or null");
+        }
 
-            if (passcode == null || passcode.isEmpty()) {
-                ILogger.logWarning("Passcode is empty or null");
-                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, new IllegalArgumentException("Пароль не может быть пустым"));
+        if (passcode == null || passcode.isEmpty()) {
+            logAndThrowInvalidCredentials("Passcode is empty or null");
+        }
+    }
+
+    private void validateOtp(String otpCode, String username) throws AuthenticationException {
+        if (otpCode == null || otpCode.trim().isEmpty()) {
+            logger.logWarning("OTP code is null or empty for user: " + username);
+            throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS,
+                    new IllegalArgumentException("The two-factor authentication code cannot be empty!"));
+        }
+
+        try {
+            String expectedOtp = TwoFactorAuthentication.getTOTPCode(authenticatedUserData.getSecretKey());
+            if (!expectedOtp.equals(otpCode)) {
+                logger.logWarning("Invalid OTP code for user: " + username);
+                throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS);
             }
         } catch (Exception e) {
-            ILogger.logError("Error validating inputs for user: " + username + " - " + e.getMessage());
+            logger.logError("Error validating OTP for user: " + username + " - " + e.getMessage());
             throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS, e);
         }
     }
@@ -142,9 +132,9 @@ public class AuthenticationService {
 
     private String decryptPassword(String encryptedPassword) throws AuthenticationException {
         try {
-            return IEncryptionService.decrypt(encryptedPassword);
+            return encryptionService.decrypt(encryptedPassword);
         } catch (EncryptionException e) {
-            ILogger.logError("Error decrypting the data for user: " + authenticatedUserData.getEncryptedUsername() + " - " + e.getMessage());
+            logger.logError("Error decrypting the data for user: " + authenticatedUserData.getEncryptedUsername() + " - " + e.getMessage());
             throw new AuthenticationException(AuthenticationException.Type.DECRYPTION_ERROR, e);
         }
     }
@@ -153,8 +143,8 @@ public class AuthenticationService {
         return inputPassword.equals(decryptedPassword);
     }
 
-    private Map<String, Object> createSuccessfulAuthenticationSession(String username) {
-        ILogger.logInfo("Authentication is successful for the user: " + username);
+    private Map<String, Object> createSuccessfulAuthenticationSession(String username) throws AuthenticationException {
+        logger.logInfo("Authentication is successful for the user: " + username);
         Map<String, Object> sessionInfo = new HashMap<>();
 
         try {
@@ -167,18 +157,20 @@ public class AuthenticationService {
             sessionInfo.put("accessToken", token);
             sessionInfo.put("expirationDate", expDate);
         } catch (Exception e) {
-            ILogger.logError("Error creating session for user: " + username + " - " + e.getMessage());
-            try {
-                throw new AuthenticationException(AuthenticationException.Type.SESSION_CREATION_ERROR, e);
-            } catch (AuthenticationException ex) {
-                throw new RuntimeException(ex);
-            }
+            logger.logError("Error creating session for user: " + username + " - " + e.getMessage());
+            throw new AuthenticationException(AuthenticationException.Type.SESSION_CREATION_ERROR, e);
         }
 
         return sessionInfo;
     }
 
-    public Map<String, Object> authenticateUserWithoutOtp(String username, String passcode) throws AuthenticationException {
-        return authenticateUserWithoutOtp(username, passcode, null);
+    private void logAndThrowInvalidCredentials(String message) throws AuthenticationException {
+        logger.logWarning(message);
+        throw new AuthenticationException(AuthenticationException.Type.INVALID_CREDENTIALS);
+    }
+
+    private void logAndThrowAuthenticationFailed(String message) throws AuthenticationException {
+        logger.logWarning(message);
+        throw new AuthenticationException(AuthenticationException.Type.AUTHENTICATION_FAILED);
     }
 }

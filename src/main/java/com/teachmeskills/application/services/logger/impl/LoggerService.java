@@ -19,36 +19,51 @@ import java.util.concurrent.*;
 import static com.teachmeskills.application.utils.constant.FilePathConstants.*;
 
 /**
- * Asynchronous logging service with file-based logging.
+ * LoggerService is an implementation of the ILogger interface providing
+ * functionality for logging messages at different levels, such as Info,
+ * Warning, and Error. It supports asynchronous logging with file output.
 
- * Features:
- * - Asynchronous log writing to files
- * - Flexible log formatting
- * - Error stack trace logging
- * - Thread-safe log queue
- * - Supports different log levels (Info, Warning, Error)
- * - No console output
+ * Key Features:
+ * - Supports asynchronous logging using a dedicated single-threaded executor.
+ * - Writes log messages to specific files based on log levels.
+ * - Allows custom log formatting using optional constructor.
+ * - Formats log messages to include timestamps, levels, and caller details.
 
- * Usage examples:
- * <pre>
- * LoggerService logger = new LoggerService();
- * logger.logInfo("Application started");
- * logger.logWarning("Potential issue detected");
- * logger.logError("Critical error", exception);
- * </pre>
- *
- * Thread safety: Fully thread-safe with concurrent log processing
- * Log storage: Writes to separate files for each log level
- *
- * @author [Oleg Savitski]
- * @version 1.1
- * @since [07.12.2024]
+ * Usage Scenarios:
+ * - Application runtime information logging.
+ * - Warning and error tracking with stack trace capture when applicable.
+ * - Asynchronous background writing to log files to avoid blocking.
+
+ * Implementation Details:
+ * - Uses a BlockingQueue to manage log entries internally.
+ * - Supports ANSI color-coding for console logs (Info, Warning, Error).
+ * - Creates and maintains a designated directory for log files.
+ * - Supports proper shutdown and resource cleanup via the AutoCloseable interface.
+
+ * Thread Safety:
+ * - The logging mechanism is designed to support multi-threaded applications
+ *   via asynchronous queue-based logging.
+ * - Ensures proper cleanup by shutting down the executor during close.
+
+ * Logging Levels:
+ * - Info: General information about application flow.
+ * - Warning: Indications of potential issues or unexpected conditions.
+ * - Error: Critical errors and exceptions, allows stack trace inclusion.
+
+ * Example Internal Workflow:
+ * 1. A logging message is queued with relevant details such as level,
+ *    formatted message, and optional stack trace for errors.
+ * 2. A background thread processes log entries from the queue.
+ * 3. Each log message is written to the appropriate file and optionally decorated
+ *    with stack trace if relevant.
  */
 public class LoggerService implements ILogger, AutoCloseable {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_INFO = "\u001B[34m";
     private static final String ANSI_ERROR = "\u001B[31m";
     private static final String ANSI_WARNING = "\u001B[33m";
+
+    private static final int CALLER_DEPTH = 3;
 
     private final String logFormat;
     private final BlockingQueue<LogEntry> logQueue;
@@ -139,25 +154,18 @@ public class LoggerService implements ILogger, AutoCloseable {
     }
 
     public void logError(String message, Throwable throwable) {
-        StackTraceElement[] stackTrace = throwable != null
-                ? throwable.getStackTrace()
-                : Thread.currentThread().getStackTrace();
+        StackTraceElement[] stackTrace = throwable != null ? throwable.getStackTrace() : Thread.currentThread().getStackTrace();
 
-        String errorLocation = extractErrorLocation(stackTrace);
-        String fullStackTrace = null;
-        String errorMessage = message;
+        String callerDetails = extractCallerDetails(stackTrace);
+        String fullStackTrace = throwable != null ? getStackTraceAsString(throwable) : null;
 
-        if (throwable != null) {
-            try {
-                fullStackTrace = getStackTraceAsString(throwable);
-            } catch (Exception e) {
-                System.err.println("Failed to get stack trace: " + e.getMessage());
-            }
-            errorMessage = String.format("%s - %s", message, throwable.getMessage() != null ? throwable.getMessage() : "No additional details");
-        }
+        String errorMessage = String.format(
+                "%s | Location: %s",
+                message,
+                callerDetails
+        );
 
-        String detailedMessage = String.format("%s | Location: %s", errorMessage, errorLocation);
-        queueLog(ANSI_ERROR + "Error" + ANSI_RESET, detailedMessage, ERROR_LOG_PATH, true, fullStackTrace);
+        queueLog(ANSI_ERROR + "Error" + ANSI_RESET, errorMessage, ERROR_LOG_PATH, true, fullStackTrace);
     }
 
     private String getStackTraceAsString(Throwable throwable) {
@@ -167,23 +175,29 @@ public class LoggerService implements ILogger, AutoCloseable {
         return stringWriter.toString();
     }
 
-    private String extractErrorLocation(StackTraceElement[] stackTrace) {
-        if (stackTrace == null || stackTrace.length == 0) {
+    private String extractCallerDetails(StackTraceElement[] stackTrace) {
+        if (stackTrace == null || stackTrace.length < CALLER_DEPTH) {
             return "Unknown location";
         }
 
-        StackTraceElement caller = stackTrace.length > 1 ? stackTrace[1] : stackTrace[0];
-        return String.format("%s.%s (Line: %d)", caller.getClassName(), caller.getMethodName(), caller.getLineNumber());
+        StackTraceElement caller = stackTrace[CALLER_DEPTH];
+        return String.format(
+                "%s.%s (Line: %d)",
+                caller.getClassName(),
+                caller.getMethodName(),
+                caller.getLineNumber()
+        );
     }
 
     private void queueLog(String level, String message, String logPath, boolean isError, String stackTrace) {
         String formattedMessage;
         try {
+            String callerLocation = extractCallerDetails(Thread.currentThread().getStackTrace());
             formattedMessage = String.format(
                     logFormat,
                     LocalDateTime.now().format(formatter),
                     level.replace(ANSI_INFO, "").replace(ANSI_ERROR, "").replace(ANSI_WARNING, "").replace(ANSI_RESET, ""),
-                    message
+                    String.format("%s | Location: %s", message, callerLocation)
             );
         } catch (Exception e) {
             System.err.println("Failed to format log message: " + e.getMessage());
