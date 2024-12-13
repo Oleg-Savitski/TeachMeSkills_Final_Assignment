@@ -5,30 +5,17 @@ import com.teachmeskills.application.model.impl.Check;
 import com.teachmeskills.application.model.impl.Invoice;
 import com.teachmeskills.application.model.impl.Order;
 /**
- * Service interface for recording and managing business statistics.
+ * The IStatsService interface provides functionality for managing and processing
+ * a variety of statistical data related to checks, invoices, and orders. It also
+ * supports exporting statistics to external files and displaying them.
 
- * Provides functionality to:
- * - Record various business entities
- * - Display current statistics
- * - Export statistics to external files
-
- * Supports tracking of:
- * - Checks
- * - Invoices
- * - Orders
-
- * Usage example:
- * <pre>
- * IStatsService statsService = new StatsServiceImpl();
- * statsService.recordCheck(check);
- * statsService.recordInvoice(invoice);
- * statsService.displayStatistics();
- * statsService.exportStatisticsToFile("stats.txt");
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [20.11.2024]
+ * Methods:
+ * - recordCheck(Check check): Records statistical data associated with a check object.
+ * - recordInvoice(Invoice invoice): Records statistical data associated with an invoice object.
+ * - recordOrder(Order order): Records statistical data associated with an order object.
+ * - displayStatistics(): Displays collected statistics on the console or relevant output medium.
+ * - exportStatisticsToFile(String filePath): Exports the collected statistics to a file,
+ *   throwing a StatisticsExportException in case of failure.
  */
 public interface IStatsService {
 

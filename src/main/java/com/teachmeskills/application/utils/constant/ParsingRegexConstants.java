@@ -1,55 +1,33 @@
 package com.teachmeskills.application.utils.constant;
 /**
- * Centralized interface for regular expression patterns used in financial document parsing.
+ * Centralized interface for parsing-related regular expression patterns.
 
- * Provides standardized regex patterns for extracting financial information from various document types.
+ * Provides standardized regex patterns for extracting specific data fields
+ * from text, such as bill amounts, invoice totals, and order totals.
 
  * Key Features:
- * - Case-insensitive matching
- * - Flexible number format support (decimal, comma-separated)
- * - Targeted extraction of total amount values
+ * - Case-insensitive matching for enhanced flexibility.
+ * - Handles various number formats such as decimal points, commas, and optional currency symbols.
+ * - Tailored patterns to handle different document structures.
 
- * Regex Patterns:
- * - {@link #CHECK_REGEX}: Pattern for parsing check total amounts
- * - {@link #INVOICE_REGEX}: Pattern for extracting invoice total amounts
- * - {@link #ORDER_REGEX}: Pattern for identifying order total amounts
+ * Regex Constants:
+ * - {@code CHECK_REGEX}: Matches and extracts the total amount from bill text,
+ *   supporting optional "EURO" and formatting like commas or periods in numbers.
+ * - {@code INVOICE_REGEX}: Extracts the total amount from invoice text, capable of handling
+ *   optional currency symbols and different formats for decimals.
+ * - {@code ORDER_REGEX}: Extracts order total, accommodating optional commas for thousands and
+ *   different decimal point formats.
 
- * Pattern Breakdown:
- * <pre>
- * CHECK_REGEX:
- * - Matches "Bill total amount" (case-insensitive)
- * - Captures numeric value with optional decimal
- *
- * INVOICE_REGEX:
- * - Matches "total amount" with optional currency symbols
- * - Supports various number formats
- *
- * ORDER_REGEX:
- * - Matches "Order Total" with flexible number formatting
- * </pre>
- *
- * Usage Examples:
- * <pre>
- * Pattern checkPattern = Pattern.compile(ParsingRegexConstants.CHECK_REGEX);
- * Matcher matcher = checkPattern.matcher(documentText);
- * if (matcher.find()) {
- *     String totalAmount = matcher.group(1);
- * }
- * </pre>
- *
- * Parsing Considerations:
- * - Regex patterns are designed to be flexible but may need updates
- * - Always validate and sanitize matched values
- * - Consider performance impact of complex regex
+ * Recommendations:
+ * - Use these patterns within appropriate parsing methods to standardize
+ *   the data extraction logic.
+ * - Ensure the input text is preprocessed (e.g., removing unnecessary white spaces)
+ *   for optimal regex matching.
 
  * Potential Improvements:
- * - Support for more currency symbols
- * - Enhanced number format handling
- * - Locale-specific parsing
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [19.11.2024]
+ * - Add patterns for parsing additional document fields.
+ * - Enhance number extraction to support more regional variations.
+ * - Build a utility class to validate or preview regex matches during runtime.
  */
 
 public interface ParsingRegexConstants {

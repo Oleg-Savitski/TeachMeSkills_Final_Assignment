@@ -22,53 +22,54 @@ import java.util.stream.Stream;
 import static com.teachmeskills.application.utils.constant.FilePathConstants.AMOUNT_STATS_FILE_NAME;
 import static com.teachmeskills.application.utils.constant.FilePathConstants.INVALID_STATS_FILE_NAME;
 /**
- * Comprehensive document parsing service for processing files in a specified directory.
+ * The {@code ParserService} class provides a comprehensive implementation of the {@code IParser} interface.
+ * It is responsible for parsing files within a specified directory and categorizing them
+ * as valid or invalid based on specific criteria. It also records and reports statistics about
+ * the file processing operation.
 
- * Key Responsibilities:
- * - Validate and parse documents from a given directory
- * - Authenticate access using session management
- * - Perform file analysis and validation
- * - Track and manage file processing statistics
+ * Key Features:
+ * - Processes files within a target directory
+ * - Categorizes files as valid or invalid based on content, extension, and naming conventions
+ * - Records and exports file processing statistics
+ * - Logs information, warnings, and errors during parsing operations
+ * - Handles the creation of an invalid files directory to store rejected files
 
- * Core Features:
- * - Access token validation
- * - File type and content validation
- * - Automatic invalid file handling
- * - Detailed statistics and reporting
+ * Core Functionalities:
+ * - Access token validation before file processing
+ * - File and directory validation
+ * - Detailed logging of significant events and errors
+ * - File analysis for content validity
+ * - Handling of invalid files via specified reasons and relocation to the invalid folder
+ * - Reporting and exporting statistics at the end of operations
 
- * Processing Workflow:
- * 1. Validate access token
- * 2. Scan directory for files
- * 3. Process each file individually
- * 4. Move invalid files to a separate directory
- * 5. Generate processing statistics
-
- * Validation Criteria:
- * - File year matching configuration
- * - File extension (.txt)
- * - Non-empty file
- * - Content validity
-
- * Error Handling:
- * - Logs processing errors
- * - Moves invalid files to a dedicated folder
- * - Generates comprehensive error reports
+ * Exception Handling:
+ * - Catches and handles exceptions related to directory access, file operations, and statistics export
+ * - Logs detailed error messages for troubleshooting and traceability
 
  * Dependencies:
- * - Session management
- * - Logging service
- * - Statistics tracking
- * - File analysis
+ * - {@link ISession}: For access token management and validation
+ * - {@link ILogger}: For logging operations
+ * - {@link StatsService}: For collecting and exporting statistics
+ * - {@link InvalidFileStats}: For recording information about invalid files
+ * - {@code FileAnalyzer}: For performing detailed file content analysis
 
- * Usage Example:
- * <pre>
- * ParserService parser = new ParserService(session, logger, statsService);
- * parser.parseDocumentsInDirectory("/path/to/documents", "access-token");
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [26.11.2024]
+ * Usage Scenarios:
+ * - Large-scale text file parsing and analysis
+ * - Invalid file handling and detailed error reporting
+ * - Generating and exporting file processing statistics
+
+ * Implementation Details:
+ * - Relocates invalid files into a subdirectory ("invalid") with assigned reasons
+ * - Supports identification of invalid files by checking for empty files,
+ *   incorrect file extensions, non-compliance with year filters, or parsing errors
+ * - Exports processing results into output files
+
+ * Limitations:
+ * - Only textual files ("*.txt") are processed
+ * - Requires a pre-defined year filter in file names for validation
+
+ * Thread Safety:
+ * - This implementation assumes single-threaded operation and may require adjustments for multi-threaded scenarios
  */
 public class ParserService implements IParser {
 

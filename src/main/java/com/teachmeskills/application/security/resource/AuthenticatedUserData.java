@@ -8,61 +8,36 @@ import com.teachmeskills.application.security.validation.LoginPasswordValidator;
 
 import java.util.Date;
 /**
- * Secure user authentication data management class with advanced security features.
+ * Represents authenticated user data containing encrypted login credentials,
+ * secret key, access tokens, and additional login-related properties.
 
- * Key Security Components:
- * - Encrypted username and password
- * - Two-factor authentication support
- * - Access token management
- * - Credential validation
+ * This class is utilized to store and manage sensitive user information securely
+ * while providing controlled access and validation mechanisms. Encrypted username
+ * is decrypted during object initialization using a provided encryption service.
+ * Additional validations on the username are performed through the
+ * {@code LoginPasswordValidator}.
 
- * Security Features:
- * - Immutable encrypted credentials
- * - Dynamic secret key management
- * - Optional OTP (One-Time Password) support
- * - Expiration tracking
+ * Responsibilities:
+ * - Store encrypted username and password.
+ * - Handle and validate secret key setup.
+ * - Provide management for One-Time Password (OTP) settings.
+ * - Manage access token and its expiration date.
 
- * Authentication Flow:
- * 1. Decrypt and validate credentials
- * 2. Generate access token
- * 3. Manage authentication lifecycle
+ * Constructor Details:
+ * - Accepts the encrypted username, encrypted password, and an implementation
+ *   of {@code IEncryption} for decryption.
+ * - Validates the decrypted username using {@code LoginPasswordValidator}.
+ * - Throws exceptions for invalid inputs, decryption failures, or validation errors.
 
- * Example Usage:
- * <pre>
- * IEncryption encryptionService = new AESEncryptionService();
- *
- * try {
- *     AuthenticatedUserData userData = new AuthenticatedUserData(
- *         encryptedUsername,
- *         encryptedPassword,
- *         encryptionService
- *     );
- *
- *     // Enable two-factor authentication
- *     userData.setOtpEnabled(true);
- *     userData.setSecretKey(generateSecretKey());
- *
- *     // Set access token and expiration
- *     userData.setAccessToken(generateAccessToken());
- *     userData.setExpirationDate(calculateExpirationDate());
- * } catch (WrongLoginException | WrongPasswordException e) {
- *     // Handle authentication errors
- * }
- * </pre>
- *
- * Error Handling:
- * - Strict null checks
- * - Comprehensive exception management
- * - Secure decryption error handling
+ * Exceptions:
+ * - {@code IllegalArgumentException}: Thrown if any of the required arguments are null.
+ * - {@code WrongLoginException}: Thrown if the username decryption fails or validation fails.
+ * - {@code WrongPasswordException}: Reserved for any future password validation logic.
 
- * Thread Safety:
- * - Partially thread-safe
- * - Immutable core credentials
- * - Synchronized access recommended for mutable fields
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [03.11.2024]
+ * Key Methods:
+ * - Getters provide access to the encrypted username, password, secret key,
+ *   OTP settings, access token, and expiration date.
+ * - Setters allow updating the secret key, OTP settings, access token, and expiration date.
  */
 public class AuthenticatedUserData {
 

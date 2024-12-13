@@ -13,45 +13,22 @@ import static com.teachmeskills.application.utils.config.ConfigurationLoader.SES
 import static com.teachmeskills.application.utils.config.ConfigurationLoader.SYMBOLS;
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Implementation of the ISession interface for managing user session tokens.
+ * The {@code SessionManager} class serves as an implementation of the {@link ISession}
+ * interface. It provides functionalities related to session management, including:
 
- * Provides functionality for:
- * - Generating secure access tokens
- * - Calculating session expiration dates
- * - Validating access tokens
+ * 1. Generating a unique access token.
+ * 2. Calculating the expiration date for the session.
+ * 3. Validating the access token and its expiration status.
+
+ * This class is integral to securing application access by verifying token validity
+ * and ensuring sessions are correctly managed. It uses the access token and expiration
+ * date as the core components of session management.
 
  * Key Features:
- * - Generates random tokens of configurable length
- * - Uses a predefined set of symbols for token creation
- * - Supports token expiration management
- * - Logs token generation and validation events
-
- * Thread Safety Considerations:
- * - Uses static fields for access token and expiration date
- * - Recommended for single-threaded or carefully synchronized environments
-
- * Configuration:
- * - Token length and expiration time are loaded from configuration
- * - Utilizes a logging mechanism for tracking session events
-
- * Usage Example:
- * <pre>
- * SessionManager sessionManager = new SessionManager();
- * String token = sessionManager.getAccessToken();
- * Date expirationDate = sessionManager.getExpirationDate();
- *
- * try {
- *     boolean isValid = sessionManager.isTokenValid(token, expirationDate);
- * } catch (SessionManagerException e) {
- *     // Handle token validation errors
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [21.11.2024]
- * @see ISession
- * @see SessionManagerException
+ * - Generates a unique session token with configurable length.
+ * - Calculates the expiration time for a session.
+ * - Validates session tokens by checking their length and expiration status.
+ * - Provides access to the current session token and expiration date.
  */
 public class SessionManager implements ISession {
 

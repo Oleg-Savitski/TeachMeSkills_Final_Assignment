@@ -7,52 +7,17 @@ import com.teachmeskills.application.utils.config.ConfigurationLoader;
 import static com.teachmeskills.application.utils.constant.SecurityConstants.PASSWORD_DIGIT_REGEX;
 import static com.teachmeskills.application.utils.constant.SecurityConstants.PASSWORD_SPECIAL_CHAR_REGEX;
 /**
- * Comprehensive login and password validation service for secure user authentication.
+ * Class responsible for validating usernames and passwords during login processes.
+ * Ensures that logins and passwords conform to predefined constraints set in the application.
+ * Throws custom exceptions in cases of validation errors.
 
- * Key Security Features:
- * - Username length validation
- * - Password complexity checking
- * - Configurable validation rules
- * - Strict input sanitization
+ * Responsibilities:
+ * - Validate usernames based on character length, presence of spaces, and null checks.
+ * - Validate passwords for character length, presence of required characters, and absence of spaces.
 
- * Validation Criteria:
- * - Maximum username/password length
- * - No whitespace characters
- * - Password complexity requirements
-
- * Security Principles:
- * - Prevent injection attacks
- * - Enforce strong password policies
- * - Validate user input rigorously
-
- * Example Usage:
- * <pre>
- * LoginPasswordValidator validator = new LoginPasswordValidator();
- *
- * try {
- *     // Validate username
- *     validator.validateUsername("john_doe");
- *
- *     // Validate password
- *     validator.validateUserPassword("StrongP@ss123");
- * } catch (WrongLoginException | WrongPasswordException e) {
- *     // Handle validation errors
- *     System.out.println("Validation failed: " + e.getMessage());
- * }
- * </pre>
- *
- * Error Handling:
- * - Specific exceptions for login and password validation
- * - Detailed error messages
- * - Prevents weak or malformed credentials
-
- * Configuration:
- * - Dynamically loads validation parameters
- * - Supports flexible security settings
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [04.11.2024]
+ * Exceptions:
+ * - Throws WrongLoginException if username does not meet validation requirements.
+ * - Throws WrongPasswordException if password violates any validation rule.
  */
 public class LoginPasswordValidator {
 

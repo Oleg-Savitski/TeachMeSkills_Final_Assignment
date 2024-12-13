@@ -3,47 +3,33 @@ package com.teachmeskills.application.exception;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * Specialized exception for session management-related errors in the application.
+ * Specialized exception class used to handle session management-related errors
+ * within the application. It includes predefined error types to classify and
+ * manage specific session-related failures.
 
  * Core Responsibilities:
- * - Represent different types of session and token handling failures
- * - Provide detailed error information
- * - Standardize session management error handling
+ * - Represent specific types of session handling issues.
+ * - Provide standardized error messages for different session failure scenarios.
+ * - Simplify session error tracking and debugging.
 
  * Key Features:
- * - Enumerated error types
- * - Predefined error messages
- * - Comprehensive token and session-related error categories
+ * - Enumerated error types for categorizing session failures.
+ * - Predefined error messages associated with each error type for consistency.
+ * - Constructor accepting error type to simplify exception handling.
 
  * Error Types:
- * - TOKEN_GENERATION_ERROR: Failure during access token creation
- * - INVALID_TOKEN: Token is not valid or recognized
- * - EXPIRATION_DATE_ERROR: Issues with token expiration settings
+ * - TOKEN_GENERATION_ERROR: Indicates an error occurred during token generation.
+ * - INVALID_TOKEN: Represents an issue with the validity of the token.
+ * - EXPIRATION_DATE_ERROR: Encounters errors when setting or handling expiration dates.
 
  * Design Patterns:
- * - Error type enumeration
- * - Predefined error message mapping
- * - Extensible exception handling
+ * - Utilizes an enum for organizing and managing error types.
+ * - Standardizes session error reporting by assigning descriptive, predefined messages.
 
- * Example Usage:
- * <pre>
- * try {
- *     generateAccessToken();
- * } catch (SessionManagerException e) {
- *     switch (e.getType()) {
- *         case TOKEN_GENERATION_ERROR:
- *             // Handle token generation failure
- *             break;
- *         case INVALID_TOKEN:
- *             // Handle invalid token scenario
- *             break;
- *     }
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [03.11.2024]
+ * Usage Notes:
+ * - Designed to be thrown in session management routines where errors such as
+ *   token generation, validation, or expiration date setting occur.
+ * - Provides meaningful messages that aid in identifying and resolving session-related issues.
  */
 public class SessionManagerException extends Exception {
 

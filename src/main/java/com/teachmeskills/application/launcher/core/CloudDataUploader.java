@@ -12,42 +12,14 @@ import static com.teachmeskills.application.utils.constant.FilePathConstants.AMO
 import static com.teachmeskills.application.utils.constant.FilePathConstants.INVALID_STATS_FILE_NAME;
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Manages the process of uploading statistical data to cloud storage.
+ * The CloudDataUploader class is responsible for handling the process of uploading
+ * statistical data files to cloud storage. It ensures that the files are prepared
+ * and validated before upload and handles various scenarios, including user input
+ * prompts and errors that might occur during the upload process.
 
- * Core Responsibilities:
- * - Prompt user for cloud upload consent
- * - Prepare files for cloud upload
- * - Validate files before upload
- * - Handle cloud storage interactions
- * - Manage upload process and error handling
-
- * Key Features:
- * - Interactive user upload confirmation
- * - Multiple file upload support
- * - Comprehensive error handling
- * - Performance tracking
-
- * Cloud Storage Integration:
- * - AWS Cloud Storage Service
- * - Flexible file upload mechanism
-
- * Error Handling Strategies:
- * - Detailed exception classification
- * - Granular error logging
- * Example Usage:
- * <pre>
- * CloudDataUploader uploader = new CloudDataUploader();
- * uploader.uploadStatisticsToCloud();
- * </pre>
- *
- * Design Patterns:
- * - Strategy pattern
- * - Service composition
- * - Error handling abstraction
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [01.12.2024]
+ * This class interacts with an AWS cloud storage service to manage file uploads.
+ * It also logs appropriate messages for success, failure, or any unexpected errors
+ * using a logging interface.
  */
 public class CloudDataUploader {
     public void uploadStatisticsToCloud() {

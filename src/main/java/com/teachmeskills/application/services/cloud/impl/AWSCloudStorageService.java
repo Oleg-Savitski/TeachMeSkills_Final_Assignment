@@ -17,59 +17,27 @@ import java.util.List;
 
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Implementation of cloud storage service using Amazon S3.
+ * AWSCloudStorageService is an implementation of the ICloudStorageService interface,
+ * providing functionality to interact with Amazon S3 (Simple Storage Service) for
+ * file uploads. This service ensures file validation, error handling, and efficient
+ * interaction with AWS resources.
 
- * Key Characteristics:
- * - AWS S3 integration for file uploads
- * - Secure credential management
- * - Comprehensive error handling
- * - Detailed logging and tracking
+ * Key Responsibilities:
+ * - Validate configuration settings for AWS, such as credentials and bucket name.
+ * - Establish connection to AWS S3 using the provided credentials and region.
+ * - Upload a single file or multiple files to the specified S3 bucket.
+ * - Handle and classify errors, including configuration issues, file access problems,
+ *   network errors, and upload failures.
 
- * Core Capabilities:
- * - Upload individual and multiple files to S3
- * - Generate unique file keys
- * - Validate file and configuration parameters
- * - Handle various upload scenarios
+ * Core Features:
+ * - Automatic generation of unique keys for uploaded files to ensure proper organization.
+ * - Detailed logging of successful uploads including file name, file size, upload time,
+ *   S3 path, bucket, and region.
+ * - Thread-safe, reusable S3 client for efficient operations.
 
- * Security Considerations:
- * - Validates AWS credentials
- * - Checks file accessibility
- * - Prevents upload of invalid files
- * - Supports secure credential provider
-
- * Usage Scenarios:
- * - Statistical data archiving
- * - Backup of system reports
- * - Remote file storage
-
- * Configuration Requirements:
- * - AWS Access Key
- * - AWS Secret Key
- * - S3 Bucket Name
- * - AWS Region
-
- * Usage Examples:
- * <pre>
- * try {
- *     ICloudStorageService cloudStorage = new AWSCloudStorageService();
- *     File reportFile = new File("statistics.csv");
- *     boolean uploaded = cloudStorage.uploadStatisticsFile(reportFile);
- * } catch (CloudStorageException e) {
- *     // Handle upload errors
- * }
- * </pre>
- *
- * Error Handling:
- * - Throws CloudStorageException for various failure scenarios
- * - Provides detailed error type classification
-
- * Performance Characteristics:
- * - Measures and logs upload time
- * - Supports batch file uploads
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [30.11.2024]
+ * Exceptions:
+ * Throws CloudStorageException in cases such as invalid configuration, file access issues,
+ * network failures, or upload errors. The exception type is categorized for precise handling.
  */
 public class AWSCloudStorageService implements ICloudStorageService {
 

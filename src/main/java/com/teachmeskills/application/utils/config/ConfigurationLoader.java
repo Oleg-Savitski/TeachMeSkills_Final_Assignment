@@ -15,54 +15,43 @@ import java.util.concurrent.TimeUnit;
 
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Comprehensive configuration management utility for the application.
+ * Handles the loading, monitoring, and management of application configuration
+ * parameters from a properties file. This class supports automatic reloading
+ * of configurations when the properties file is modified and provides methods
+ * for retrieving and saving property values.
 
- * Key Responsibilities:
- * - Load and manage application configuration from properties file
- * - Support dynamic configuration reloading
- * - Provide environment-based configuration overrides
- * - Manage secure credentials and settings
+ * Features include:
+ * - Automatic monitoring of a properties file for changes.
+ * - Thread-safe access to configuration parameters.
+ * - Default values for critical configuration settings.
+ * - Support for environment variables as overrides.
+ * - Integration with AWS-specific credentials and settings.
+ * - Encrypted credentials loading mechanism.
 
- * Features:
- * - File-based configuration with properties file
- * - Real-time configuration monitoring and hot-reloading
- * - Environment variable priority
- * - Secure credential handling
- * - Validation of configuration values
+ * The configuration is primarily intended to be initialized and used statically.
+ * Manual reloading can also be triggered when necessary.
 
- * Configuration Sources (in priority order):
- * 1. Environment Variables
- * 2. Properties File
- * 3. Default Values
+ * Key responsibilities:
+ * - Load properties from the application-specific properties file.
+ * - Validate and initialize default values for system-critical parameters.
+ * - Monitor the properties file for changes and automatically reload configurations.
+ * - Provide a mechanism to manually save and reload property values.
+ * - Integrate secure retrieval methods for sensitive configuration settings.
 
- * Thread Safety:
- * - Uses thread-safe scheduled executor for file monitoring
- * - Provides synchronized configuration reloading
+ * On initialization, this class ensures all critical parameters are loaded and
+ * monitors the properties file in the background for updates. If any issues
+ * occur during loading, default configuration values are set.
 
- * Usage Examples:
- * <pre>
- * // Accessing configuration values
- * int tokenLength = ConfigurationLoader.SESSION_TOKEN_LENGTH;
- * String symbols = ConfigurationLoader.SYMBOLS;
- *
- * // Manually reloading configuration
- * ConfigurationLoader.reloadConfiguration();
- *
- * // Saving a new property
- * ConfigurationLoader.saveProperty("KEY", "VALUE");
- * </pre>
- *
- * Configuration Monitoring:
- * - Checks properties file every 5 seconds
- * - Automatically reloads on file changes
+ * Thread safety:
+ * - Access to the configuration is thread-safe as configuration parameters
+ *   are either final or updated atomically.
 
- * Error Handling:
- * - Logs configuration loading and modification errors
- * - Falls back to default values if configuration fails
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [26.11.2024]
+ * To shut down the monitoring task, the `shutdown` method is provided, ensuring
+ * that all background processes are terminated cleanly.
+
+ * Logging:
+ * - This class relies on a logger interface (`I_LOGGER`) for recording errors,
+ *   warnings, and informational messages during the lifecycle.
  */
 public class ConfigurationLoader {
 

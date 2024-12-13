@@ -13,48 +13,32 @@ import static com.teachmeskills.application.utils.constant.FilePathConstants.CON
 import static com.teachmeskills.application.utils.constant.FilePathConstants.QR_CODE_PATH;
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Manages multi-factor authentication process, specifically handling QR code generation
- * and secret key management for two-factor authentication.
+ * The MultiFactorAuthManager class is responsible for managing multi-factor authentication
+ * for applications. It provides functionality to retrieve or generate QR codes
+ * for enabling two-factor authentication using tools like Google Authenticator or Microsoft Authenticator.
 
- * Key Responsibilities:
- * - Generate and manage two-factor authentication secret keys
- * - Create QR codes for authentication
- * - Persist authentication configuration
+ * Responsibilities:
+ * - Verify whether a pre-existing secret key exists and retrieve it.
+ * - Generate a new QR code for two-factor authentication and save a corresponding secret key, if needed.
+ * - Handle errors or exceptions during the QR code generation and configuration process.
 
- * Authentication Workflow:
- * 1. Check for existing secret key
- * 2. Generate new secret key if not exists
- * 3. Create QR code for authentication app
- * 4. Store secret key in configuration
+ * Methods:
+ * - retrieveOrGenerateQRCode: This method retrieves an existing two-factor authentication secret key
+ *   or generates a new QR code if the key does not exist. It also ensures the new secret key is stored
+ *   in the configuration file.
 
- * Security Considerations:
- * - Secure secret key generation
- * - Configuration file protection
- * - Centralized authentication management
+ * Error Handling:
+ * - Logs errors using the I_LOGGER implementation in cases where QR code creation or retrieval fails.
+ * - Wraps and rethrows exceptions as runtime exceptions to indicate failures.
 
- * Supported Authentication Platforms:
- * - Microsoft Authenticator
- * - Google Authenticator
+ * Dependencies:
+ * - TwoFactorAuthentication: Used for generating the secret key, creating barcodes, and saving QR codes.
+ * - I_LOGGER: Used for logging error messages.
+ * - Properties and file I/O operations to store and retrieve secret keys and configurations.
 
- * Configuration Management:
- * - Uses Properties for key storage
- * - Persistent configuration file
- * - Secure key generation
-
- * Example Usage:
- * <pre>
- * // Retrieve or generate QR code for authentication
- * String secretKey = MultiFactorAuthManager.retrieveOrGenerateQRCode();
- * </pre>
- *
- * Design Patterns:
- * - Singleton-like static utility class
- * - Configuration management
- * - Secure key generation
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [01.12.2024]
+ * Constraints:
+ * - The QR code is saved in a predefined file path.
+ * - The email and app-specific label for the QR code generation are hardcoded.
  */
 public class MultiFactorAuthManager {
     public static String retrieveOrGenerateQRCode() {

@@ -3,48 +3,34 @@ package com.teachmeskills.application.exception;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * Specialized exception for cloud storage-related errors in the application.
+ * Exception indicating errors related to cloud storage operations.
 
  * Core Responsibilities:
- * - Represent different types of cloud storage failures
- * - Provide detailed error information
- * - Standardize cloud storage error handling
+ * - Represent specific types of issues encountered while interacting
+ *   with cloud storage services.
+ * - Provide detailed error information for debugging and error handling.
+ * - Support classification of error types to ensure standardized handling
+ *   across the application.
 
  * Key Features:
- * - Enumerated error types
- * - Predefined error messages
- * - Support for root cause tracking
+ * - Enumerated error types for common cloud storage issues.
+ * - Predefined error messages associated with each error type.
+ * - Support for root cause chaining via the throwable cause.
 
  * Error Types:
- * - FILE_ACCESS_ERROR: Issues accessing file resources
- * - UPLOAD_FAILED: Problems uploading files to cloud storage
- * - CONFIGURATION_ERROR: Misconfiguration of cloud storage settings
- * - NETWORK_ERROR: Network-related issues during cloud storage operations
+ * - FILE_ACCESS_ERROR: Error accessing a file in the local or cloud file system.
+ * - UPLOAD_FAILED: File upload to cloud storage has failed.
+ * - CONFIGURATION_ERROR: Issues related to misconfiguration of cloud storage settings.
+ * - NETWORK_ERROR: Network connectivity issues while interacting with cloud storage.
 
  * Design Patterns:
- * - Error type enumeration
- * - Predefined error message mapping
- * - Extensible exception handling
+ * - Utilizes an enum to organize and categorize error types.
+ * - Supports extensibility of error reporting by standardizing exception structure.
 
- * Example Usage:
- * <pre>
- * try {
- *     uploadFileToCloudStorage();
- * } catch (CloudStorageException e) {
- *     switch (e.getType()) {
- *         case UPLOAD_FAILED:
- *             // Handle upload failure
- *             break;
- *         case NETWORK_ERROR:
- *             // Handle network issues
- *             break;
- *     }
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [02.12.2024]
+ * Usage Notes:
+ * - Intended for use in cloud storage-related operations where specific
+ *   error conditions need to be flagged.
+ * - Facilitates debugging by providing meaningful error types and messages.
  */
 public class CloudStorageException extends AppException {
 

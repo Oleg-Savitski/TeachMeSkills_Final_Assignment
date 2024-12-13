@@ -1,47 +1,21 @@
 package com.teachmeskills.application.utils.constant;
 /**
- * Centralized interface for security-related constants and regex patterns.
+ * Centralized interface for security-related constants.
 
- * Provides standardized regular expression patterns for password validation
- * and other security-related checks.
+ * Provides predefined regular expressions for validating password strength
+ * based on the inclusion of specific character types.
 
  * Key Features:
- * - Regex patterns for password complexity validation
- * - Supports common password strength requirements
+ * - Regular expression to check for the presence of at least one digit in a password.
+ * - Regular expression to check for the presence of at least one special character in a password.
 
- * Password Validation Patterns:
- * - {@link #PASSWORD_DIGIT_REGEX}: Checks for presence of at least one digit
- * - {@link #PASSWORD_SPECIAL_CHAR_REGEX}: Validates special character inclusion
-
- * Usage Examples:
- * <pre>
- * // Checking password complexity
- * boolean hasDigit = password.matches(SecurityConstants.PASSWORD_DIGIT_REGEX);
- * boolean hasSpecialChar = password.matches(SecurityConstants.PASSWORD_SPECIAL_CHAR_REGEX);
- *
- * if (!hasDigit || !hasSpecialChar) {
- *     throw new WeakPasswordException("Password does not meet complexity requirements");
- * }
- * </pre>
- *
- * Password Complexity Recommendations:
- * - Combine multiple validation checks
- * - Implement comprehensive password strength validation
- * - Consider using more advanced password validation libraries
+ * Usage Recommendations:
+ * - Use these regex constants for password validation in authentication or user management modules.
+ * - Combine these patterns with additional validation rules to enforce comprehensive password policies.
 
  * Potential Improvements:
- * - Add regex for uppercase and lowercase letters
- * - Implement minimum length requirement
- * - Support for custom password policies
-
- * Security Considerations:
- * - Regex patterns are basic checks
- * - Supplement with additional security measures
- * - Regularly update security requirements
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [28.11.2024]
+ * - Extend the constants to include regex for other password criteria, such as length, uppercase letters, or whitespace.
+ * - Allow customization or configuration of these patterns to meet specific security requirements.
  */
 
 public interface SecurityConstants {

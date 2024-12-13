@@ -4,46 +4,31 @@ import com.teachmeskills.application.model.IDocument;
 
 import java.util.Objects;
 /**
- * Abstract base implementation for financial documents with standard amount management.
+ * Represents the base implementation of a financial document with a total monetary amount.
+
+ * This abstract class provides the foundation for various types of financial documents by
+ * implementing the core functionality defined in the IDocument interface. The total amount
+ * associated with the document is immutable and set during the creation of the derived class
+ * instance.
 
  * Design Characteristics:
- * - Implements core IDocument interface
- * - Provides common document functionality
- * - Supports inheritance for specialized document types
+ * - Immutable total amount property.
+ * - Implements the core method from the IDocument interface.
+ * - Serves as a base class for specific financial document types.
+
+ * Subclasses:
+ * Classes extending AbstractDocument are expected to represent specific types of financial
+ * documents, such as invoices, orders, and checks. These subclasses inherit the functionality
+ * provided by AbstractDocument, while adding domain-specific behavior or attributes.
 
  * Key Features:
- * - Immutable total amount
- * - Standard equality and hash code implementation
- * - Simplified document creation
+ * - Immutable financial data model.
+ * - Consistent and reusable base for financial document hierarchy.
 
- * Inheritance Strategy:
- * - Base class for specific document implementations
- * - Enforces consistent amount handling
-
- * Example Inheritance:
- * <pre>
- * public class Invoice extends AbstractDocument {
- *     private String invoiceNumber;
- *
- *     public Invoice(double amount, String invoiceNumber) {
- *         super(amount);
- *         this.invoiceNumber = invoiceNumber;
- *     }
- * }
- * </pre>
- *
- * Design Patterns:
- * - Template Method
- * - Immutable Object
-
- * Best Practices:
- * - Enforce document amount validation
- * - Provide consistent object comparison
- * - Support efficient collection storage
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [12.11.2024]
+ * Methods:
+ * - getTotalAmount(): Retrieves the immutable total amount of the document.
+ * - equals(): Compares this document with another object for equality based on the totalAmount.
+ * - hashCode(): Generates a hashcode based on the totalAmount for consistent hashing.
  */
 public abstract class AbstractDocument implements IDocument {
 

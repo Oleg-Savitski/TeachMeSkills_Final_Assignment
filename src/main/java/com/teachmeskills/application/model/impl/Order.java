@@ -1,44 +1,27 @@
 package com.teachmeskills.application.model.impl;
 /**
- * Represents a financial order document with a specific total amount.
+ * Represents a financial order document with a specific total monetary amount.
 
- * Document Type Characteristics:
- * - Extends AbstractDocument
- * - Immutable financial transaction record
- * - Standardized order representation
+ * This class extends the AbstractDocument class, inheriting its functionality
+ * to manage immutable financial data. It is designed to model orders within
+ * the financial document hierarchy.
 
- * Business Domains:
- * - Sales transactions
- * - Purchase management
- * - Inventory tracking
+ * Features:
+ * - Immutable Total Amount: The total amount is set during instantiation and cannot be modified.
+ * - Core Financial Functionality: Leverages the AbstractDocument base functionality for
+ *   managing the document's total amount consistently.
+ * - Part of a Financial Document System: Integrates with other financial documents, such as checks
+ *   and invoices, for use in broader financial workflows.
 
- * Design Principles:
- * - Lightweight document model
- * - Consistent with IDocument interface
- * - Supports comprehensive order tracking
+ * Use Cases:
+ * - Payment Processing: Used in systems handling order payments.
+ * - Record Keeping: Maintains a consistent and immutable record of order details.
+ * - Reporting and Analytics: Can be included in financial reporting or analytical processes.
 
- * Example Usage:
- * <pre>
- * // Creating an order with a specific amount
- * Order purchaseOrder = new Order(3500.50);
- *
- * // Retrieving total order amount
- * double orderTotal = purchaseOrder.getTotalAmount();
- * </pre>
- *
- * Integration Scenarios:
- * - E-commerce platforms
- * - Supply chain management
- * - Financial reporting systems
-
- * Key Attributes:
- * - Immutable total amount
- * - Simple and extensible structure
- * - Supports various business models
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [12.11.2024]
+ * Related Classes:
+ * - AbstractDocument: The base class providing shared financial document functionality.
+ * - Check: Models financial checks as part of the same document system.
+ * - Invoice: Represents invoices within the financial hierarchy.
  */
 public class Order extends AbstractDocument {
 

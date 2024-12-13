@@ -6,51 +6,27 @@ import com.teachmeskills.application.utils.config.ConfigurationLoader;
 
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Main entry point for the Financial Analysis Application.
+ * The FinancialAnalysisLauncher class serves as the main entry point for the Financial Analysis application.
+ * It initializes the document analysis coordinator, manages the execution of the document analysis process,
+ * and ensures proper handling of resource shutdown and exceptions.
 
- * Application Characteristics:
- * - Centralized application launcher
- * - Manages document analysis workflow
- * - Provides robust error handling
+ * Core Responsibilities:
+ * - Launch the document analysis process.
+ * - Ensure proper resource management and environment cleanup.
+ * - Handle unexpected exceptions during execution.
 
- * Key Responsibilities:
- * - Coordinate document analysis process
- * - Manage application lifecycle
- * - Handle critical exceptions
+ * Workflow:
+ * 1. Instantiate the DocumentAnalysisCoordinator.
+ * 2. Execute the document analysis via the coordinator.
+ * 3. Handle exceptions by logging critical errors and notifying the user.
+ * 4. Perform cleanup operations with resource shutdown in the finally block.
 
- * Workflow Overview:
- * 1. Create document analysis coordinator
- * 2. Execute document analysis
- * 3. Handle potential exceptions
- * 4. Perform cleanup operations
+ * Exception Handling:
+ * - Catches generic exceptions to ensure smooth application handling.
+ * - Logs error messages for unexpected issues using the global I_LOGGER instance.
 
- * Error Handling Strategy:
- * - Centralized exception management
- * - Detailed error logging
- * - Graceful application shutdown
-
- * Resource Management:
- * - Automatic resource closure
- * - Configuration loader shutdown
- * - Scanner resource cleanup
-
- * Example Execution Flow:
- * <pre>
- * // Application starts
- * FinancialAnalysisLauncher.main(args);
- * // Performs document analysis
- * // Handles potential errors
- * // Closes resources
- * </pre>
- *
- * Design Patterns:
- * - Singleton (Logger)
- * - Facade (DocumentAnalysisCoordinator)
- * - Try-with-resources
- *
- * @author [Oleg Savitski]
- * @version 1.1
- * @since [01.12.2024]
+ * Cleanup:
+ * - Gracefully shuts down system resources such as configuration loaders and authentication gateways.
  */
 public class FinancialAnalysisLauncher {
     public static void main(String[] args) {

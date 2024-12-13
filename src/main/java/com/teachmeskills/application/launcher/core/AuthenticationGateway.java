@@ -18,47 +18,32 @@ import static com.teachmeskills.application.utils.config.ConfigurationLoader.VAL
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_ENCRYPTION_SERVICE;
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Manages the authentication process for the application.
+ * The AuthenticationGateway class handles user authentication processes including
+ * username/password validation and two-factor authentication (2FA).
 
- * Core Responsibilities:
- * - Two-factor authentication verification
- * - User credential validation
- * - Secure login process
- * - Error handling and logging
+ * Responsibilities:
+ * - Verifies two-factor authentication (2FA) codes.
+ * - Authenticates users using username and password, handling multiple attempts
+ *   and validation errors.
+ * - Logs authentication attempts and errors for tracking and diagnostics.
+ * - Decrypts sensitive data using an encryption service for authentication purposes.
 
- * Key Features:
- * - Multi-step authentication
- * - Configurable authentication attempts
- * - Secure input handling
- * - Comprehensive error management
+ * Behavior:
+ * - Validates user credentials using the LoginPasswordValidator.
+ * - Supports maximum retry attempts for password/2FA code verification.
+ * - Integrates encryption and authentication services for secure access.
+ * - Logs authentication steps for audit and debugging purposes.
 
- * Authentication Workflow:
- * 1. Two-factor authentication
- * 2. Username and password validation
- * 3. Credential verification
- * 4. Session management
+ * Exceptions:
+ * - Throws RuntimeException when authentication fails or validation exceeds the maximum attempts.
+ * - Handles validation exceptions such as WrongLoginException, WrongPasswordException,
+ *   and EncryptionException using custom error logs and messaging.
 
- * Security Measures:
- * - Encrypted credentials
- * - Input validation
- * - Attempt limit
- * - Detailed logging
-
- * Example Usage:
- * <pre>
- * AuthenticationGateway gateway = new AuthenticationGateway();
- * gateway.verifyTwoFactorAuthenticationCode(secretKey);
- * AuthenticatedUserData userData = gateway.performUserAuthentication();
- * </pre>
- *
- * Design Patterns:
- * - Gateway pattern
- * - Validation strategy
- * - Error handling abstraction
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [01.12.2024]
+ * Dependencies:
+ * - LoginPasswordValidator for username/password validation.
+ * - EncryptionService for decryption of sensitive data.
+ * - TwoFactorAuthentication for 2FA code generation and validation.
+ * - Logger for logging messages during authentication processing.
  */
 public class AuthenticationGateway {
 

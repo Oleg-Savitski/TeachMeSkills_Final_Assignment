@@ -16,59 +16,9 @@ import static com.teachmeskills.application.utils.constant.FilePathConstants.QR_
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_ENCRYPTION_SERVICE;
 import static com.teachmeskills.application.utils.constant.ServiceConstants.I_LOGGER;
 /**
- * Coordinates the entire document analysis workflow.
-
- * Core Responsibilities:
- * - Manage document analysis lifecycle
- * - Coordinate authentication process
- * - Handle document processing
- * - Manage system resources
-
- * Refined Workflow Stages:
- * 1. Prepare system directories
- * 2. Perform user authentication (login/password)
- * 3. Generate or retrieve QR code
- * 4. Verify two-factor authentication
- * 5. Select document directory
- * 6. Analyze documents
- * 7. Upload statistics
-
- * Authentication Flow:
- * - Primary authentication via username/password
- * - Secondary authentication through two-factor QR code
- * - Secure session management
-
- * Security Enhancements:
- * - Prioritized login credentials verification
- * - Two-factor authentication as secondary layer
- * - Encrypted session management
- * - Comprehensive access control
-
- * Performance Tracking:
- * - Measure processing time
- * - Log authentication and analysis results
- * - Detailed performance metrics
-
- * Error Handling:
- * - Comprehensive exception management
- * - Granular error logging
- * - Secure fallback mechanisms
-
- * Example Usage:
- * <pre>
- * DocumentAnalysisCoordinator coordinator = new DocumentAnalysisCoordinator();
- * coordinator.executeDocumentAnalysis();
- * </pre>
- *
- * Design Patterns:
- * - Coordinator pattern
- * - Service composition
- * - Dependency injection
- * - Secure authentication strategy
-
- * @author [Oleg Savitski]
- * @version 1.1
- * @since [01.12.2024]
+ * The DocumentAnalysisCoordinator class is responsible for orchestrating the document
+ * analysis workflow. This includes initializing necessary resources, managing authentication,
+ * and analyzing documents from a user-supplied directory.
  */
 public class DocumentAnalysisCoordinator {
     public void executeDocumentAnalysis() {

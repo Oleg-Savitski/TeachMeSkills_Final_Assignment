@@ -2,48 +2,25 @@ package com.teachmeskills.application.exception;
 
 import java.io.Serial;
 /**
- * Base abstract exception class for the application.
+ * Represents a generic application-level exception that serves as a base
+ * for more specific exception types within the application.
 
  * Core Responsibilities:
- * - Provide a common base for application-specific exceptions
- * - Standardize exception handling
- * - Support serialization
+ * - Provide a common foundation for custom exceptions in the application
+ * - Simplify exception hierarchy by extending from the Java Exception class
+ * - Support custom error messages and causal tracking
 
  * Key Features:
- * - Extends standard Exception class
- * - Supports custom error messages
- * - Allows chaining of underlying causes
+ * - Constructor for initializing exceptions with a message
+ * - Constructor for initializing exceptions with a message and a cause
 
- * Design Principles:
- * - Centralized exception management
- * - Consistent error reporting
- * - Extensibility for specific exception types
+ * Usage Notes:
+ * This class is intended to be extended by more specific exception types
+ * that represent domain or application-specific errors.
 
- * Inheritance Strategy:
- * - Abstract base class for all application-specific exceptions
- * - Provides common constructor implementations
-
- * Serialization Support:
- * - Implements serialVersionUID for version control
- * - Ensures compatibility across different Java versions
-
- * Example Usage:
- * <pre>
- * public class CustomAppException extends AppException {
- *     public CustomAppException(String message) {
- *         super(message);
- *     }
- * }
- * </pre>
- *
- * Best Practices:
- * - Use specific exception types
- * - Provide clear, descriptive error messages
- * - Include root cause when possible
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [01.12.2024]
+ * Design Patterns:
+ * - Serves as a base class in a custom exception hierarchy, enabling a
+ *   consistent structure for exception handling throughout the application
  */
 public abstract class AppException extends Exception {
 

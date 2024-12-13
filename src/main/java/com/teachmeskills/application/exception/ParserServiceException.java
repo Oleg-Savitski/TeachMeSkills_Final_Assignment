@@ -3,49 +3,36 @@ package com.teachmeskills.application.exception;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * Specialized exception for parser service-related errors in the application.
+ * Exception indicating errors related to file parsing operations within the application.
 
  * Core Responsibilities:
- * - Represent different types of parsing and file handling failures
- * - Provide detailed error information
- * - Standardize parser service error handling
+ * - Represent specific types of parsing-related issues.
+ * - Provide detailed and standardized error messages for various parsing failure scenarios.
+ * - Allow identification of the type of parsing error that occurred through an enumerated type.
+ * - Support root cause analysis via the throwable cause.
 
  * Key Features:
- * - Enumerated error types
- * - Predefined error messages
- * - Support for root cause tracking
+ * - Enumerated error types for classifying common parsing issues.
+ * - Predefined error messages mapped to each error type for consistency in error reporting.
+ * - Detailed information about the error type through the {@code getType()} method.
 
  * Error Types:
- * - INVALID_DIRECTORY: Directory does not exist or is invalid
- * - FILE_NOT_FOUND: Specified file cannot be located
- * - FILE_MOVE_ERROR: Issues during file transfer
- * - FILE_PROCESSING_ERROR: General file processing failures
- * - INVALID_FILE_CONTENT: File contains invalid or unexpected content
+ * - INVALID_DIRECTORY: Indicates the specified directory is invalid or does not exist.
+ * - FILE_NOT_FOUND: Signals that the expected file could not be located.
+ * - FILE_MOVE_ERROR: Represents an error during the file transfer or movement process.
+ * - FILE_PROCESSING_ERROR: Denotes an error encountered during file processing tasks.
+ * - INVALID_FILE_CONTENT: Indicates that the content of the file is not valid or cannot be processed.
 
  * Design Patterns:
- * - Error type enumeration
- * - Predefined error message mapping
- * - Extensible exception handling
+ * - Utilizes an enum to categorize and manage different error scenarios.
+ * - Facilitates extensible and structured handling of parsing-related exceptions.
 
- * Example Usage:
- * <pre>
- * try {
- *     parseFile(filePath);
- * } catch (ParserServiceException e) {
- *     switch (e.getType()) {
- *         case FILE_NOT_FOUND:
- *             // Handle missing file
- *             break;
- *         case INVALID_FILE_CONTENT:
- *             // Handle content validation error
- *             break;
- *     }
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [04.11.2024]
+ * Usage Notes:
+ * - This class is specifically intended for scenarios where parsing operations fail, such as file reading or processing errors.
+ * - Enables cleaner exception handling by providing a clear type and message for each error scenario.
+
+ * Constructor Details:
+ * - Supports initialization with both an error type and an optional throwable cause for tracing the root cause of errors.
  */
 public class ParserServiceException extends Exception {
 

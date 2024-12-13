@@ -3,47 +3,30 @@ package com.teachmeskills.application.exception;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * Specialized exception for encryption-related errors in the application.
+ * Exception indicating errors related to encryption and decryption operations.
 
  * Core Responsibilities:
- * - Represent different types of encryption failures
- * - Provide detailed error information
- * - Standardize encryption error handling
+ * - Represent specific types of encryption-related issues.
+ * - Provide standardized error messages for different encryption failure reasons.
+ * - Offer detailed error information to help diagnose encryption errors effectively.
 
  * Key Features:
- * - Enumerated error types
- * - Predefined error messages
- * - Support for root cause tracking
+ * - Enumerated error types to classify encryption issues.
+ * - Predefined error messages associated with specific error types.
+ * - Support for root cause chaining via the throwable cause for improved traceability.
 
  * Error Types:
- * - ENCRYPTION_FAILED: Issues during encryption process
- * - DECRYPTION_FAILED: Problems during decryption process
- * - INVALID_KEY: Incorrect or invalid encryption key
+ * - ENCRYPTION_FAILED: A general failure in the encryption process.
+ * - DECRYPTION_FAILED: A failure that occurs during the decryption process.
+ * - INVALID_KEY: Indicates the use of an invalid or incompatible encryption key.
+
+ * Usage Notes:
+ * - Designed to be used in scenarios where encryption or decryption operations might fail.
+ * - Helps in categorizing encryption-related issues, enabling better error handling and logging.
 
  * Design Patterns:
- * - Error type enumeration
- * - Predefined error message mapping
- * - Extensible exception handling
-
- * Example Usage:
- * <pre>
- * try {
- *     encryptSensitiveData();
- * } catch (EncryptionException e) {
- *     switch (e.getType()) {
- *         case ENCRYPTION_FAILED:
- *             // Handle encryption failure
- *             break;
- *         case INVALID_KEY:
- *             // Handle key-related issues
- *             break;
- *     }
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [03.12.2024]
+ * - Utilizes an enum to organize and manage different error types.
+ * - Standardizes the handling of encryption-related exceptions within the application.
  */
 public class EncryptionException extends AppException {
     public enum Type {

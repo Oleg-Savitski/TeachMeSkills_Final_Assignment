@@ -1,45 +1,20 @@
 package com.teachmeskills.application.services.parser;
 /**
- * Interface for parsing documents within a specified directory.
+ * Represents an interface for parsing documents in a specified directory.
 
- * Defines a contract for document parsing services with the following key characteristics:
- * - Processes multiple documents in a given directory
- * - Supports authentication via access token
- * - Designed for flexible document processing strategies
+ * This interface is intended to define a contract for processing and
+ * handling document parsing functionality. The primary operation is to
+ * parse all documents located in a given directory using the provided access
+ * credentials (access token).
 
- * Key Features:
- * - Directory-based document parsing
- * - Secure access with authentication token
- * - Flexible implementation for different document types
+ * Responsibilities:
+ * - Process all documents found in the specified directory.
+ * - Ensure proper handling of valid and invalid files.
+ * - Utilize access tokens for any necessary authentication while parsing.
 
- * Usage Scenarios:
- * - Bulk document processing
- * - Automated document analysis
- * - File system document extraction
-
- * Method Specification:
- * - {@link #parseDocumentsInDirectory(String, String)}
- *   Parses all documents in the specified directory
-
- * Usage Examples:
- * <pre>
- * IParser parser = new DocumentParser();
- * parser.parseDocumentsInDirectory("/path/to/documents", "user-access-token");
- * </pre>
- *
- * Design Considerations:
- * - Implement robust error handling
- * - Support various document formats
- * - Provide logging and traceability
-
- * Potential Improvements:
- * - Add support for recursive directory parsing
- * - Implement filtering mechanisms
- * - Support for different parsing strategies
- *
- * @author [Oleg savitski]
- * @version 1.0
- * @since [18.11.2024]
+ * Method:
+ * - `parseDocumentsInDirectory(String directoryPath, String accessToken)`:
+ *   Parses all files in the given directory using the accessToken for authorization.
  */
 public interface IParser {
 

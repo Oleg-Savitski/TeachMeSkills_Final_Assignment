@@ -1,41 +1,25 @@
 package com.teachmeskills.application.utils.constant;
 /**
- * Constants interface for File Input/Output operations in the application.
+ * Centralized interface for file input/output constants in the application.
 
- * Provides standardized configuration values for file handling:
- * - Buffer size for efficient I/O operations
- * - Maximum allowed file size
+ * Provides standardized constants for managing file reading and writing operations.
 
- * Purpose:
- * - Centralize file-related configuration constants
- * - Ensure consistent I/O parameters across the application
+ * Key Features:
+ * - Predefined buffer size for file I/O operations to optimize performance.
+ * - Maximum file size limit to ensure efficient resource management and to prevent issues
+ *   with excessively large files.
 
- * Key Constants:
- * - {@link #BUFFER_SIZE}: Recommended buffer size for file streams
- * - {@link #MAX_FILE_SIZE_MB}: Maximum file size limit in megabytes
-
- * Usage Examples:
- * <pre>
- * // Using buffer size in file operations
- * byte[] buffer = new byte[FileIOConstants.BUFFER_SIZE];
- *
- * // Checking file size before processing
- * if (file.length() > FileIOConstants.MAX_FILE_SIZE_MB * 1024 * 1024) {
- *     throw new FileSizeLimitExceededException("File is too large");
- * }
- * </pre>
- *
- * Best Practices:
- * - Use these constants to maintain consistency
- * - Adjust values based on system resources and performance requirements
+ * Constants:
+ * - BUFFER_SIZE: The size of the buffer (in bytes) used for file reading and writing.
+ * - MAX_FILE_SIZE_MB: Maximum allowed file size in megabytes for processing within the application.
 
  * Recommendations:
- * - Buffer size optimized for most standard file operations
- * - File size limit provides a basic security mechanism
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [28.11.2024]
+ * - Use BUFFER_SIZE in I/O streams to maintain consistent performance across file operations.
+ * - Validate file size against MAX_FILE_SIZE_MB before processing to avoid memory issues.
+
+ * Potential Improvements:
+ * - Make these constants configurable via an external configuration file.
+ * - Add more constants related to file encoding or I/O timeout settings.
  */
 public interface FileIOConstants {
 

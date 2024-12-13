@@ -4,31 +4,23 @@ import com.teachmeskills.application.exception.SessionManagerException;
 
 import java.util.Date;
 /**
- * The {@code ISession} interface defines the contract for session management,
- * providing comprehensive methods for access token generation, expiration calculation,
- * and validation.
- *
- * <p>This interface is crucial for implementing secure user authentication and
- * session tracking mechanisms in applications.</p>
- *
- * Key Responsibilities:
- * - Generate unique access tokens
- * - Calculate session expiration dates
- * - Validate access tokens
+ * Represents a session management interface for handling access tokens and their validity.
+ * This interface defines methods for creating access tokens, calculating expiration dates,
+ * validating tokens, and retrieving the current access token.
 
- * Usage Example:
- * <pre>
- * ISession sessionManager = new SessionImpl();
- * String token = sessionManager.createAccessToken(16);
- * Date expirationDate = sessionManager.calculateExpirationDate(30);
- * boolean isValid = sessionManager.isTokenValid(token, expirationDate);
- * </pre>
- *
- * Thread Safety: Implementations should consider thread-safety for multi-threaded environments.
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [21.11.2024]
+ * Responsibilities:
+ * - Generate unique access tokens with a specified length.
+ * - Calculate expiration dates based on the provided time duration.
+ * - Validate access tokens against their expiration dates.
+ * - Access the generated access token.
+
+ * Methods:
+ * - `createAccessToken(int length)`: Generates a new access token with the given length.
+ * - `calculateExpirationDate(int minutesToAdd)`: Computes an expiration date by adding
+ *   the specified number of minutes to the current time.
+ * - `isTokenValid(String accessToken, Date expDate)`: Validates an access token based on
+ *   its expiration date and throws an exception for invalid scenarios.
+ * - `getAccessToken()`: Retrieves the current access token for the session.
  */
 public interface ISession {
 

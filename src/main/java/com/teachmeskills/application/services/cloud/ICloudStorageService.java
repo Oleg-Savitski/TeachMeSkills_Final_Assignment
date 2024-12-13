@@ -5,53 +5,16 @@ import com.teachmeskills.application.exception.CloudStorageException;
 import java.io.File;
 import java.util.List;
 /**
- * Interface for cloud storage operations focused on statistics file management.
+ * Interface for cloud storage operations, providing methods to upload files
+ * to a cloud storage service. Implementations of this interface are expected
+ * to handle the specifics of interacting with different cloud storage platforms
+ * and managing data transfer.
 
- * Key Characteristics:
- * - Abstraction of cloud storage upload mechanisms
- * - Support for single and multiple file uploads
- * - Robust error handling for cloud storage interactions
-
- * Core Capabilities:
- * - Upload individual statistics files
- * - Upload collections of statistics files
- * - Provide upload status feedback
-
- * Usage Scenarios:
- * - Archiving analytical data
- * - Backup of statistical reports
- * - Remote storage of performance metrics
-
- * Error Handling:
- * - Throws CloudStorageException for upload failures
- * - Provides boolean status of upload operations
-
- * Design Considerations:
- * - Platform-independent file upload interface
- * - Supports various cloud storage providers
- * - Minimal coupling with specific storage implementations
-
- * Usage Examples:
- * <pre>
- * ICloudStorageService cloudService = new AWSCloudStorageService();
- *
- * // Upload single file
- * File statisticsReport = new File("report.csv");
- * boolean singleUploadStatus = cloudService.uploadStatisticsFile(statisticsReport);
- *
- * // Upload multiple files
- * List<File> reports = Arrays.asList(report1, report2, report3);
- * boolean multiUploadStatus = cloudService.uploadStatisticsFiles(reports);
- * </pre>
- *
- * Potential Implementations:
- * - Amazon S3 Cloud Storage
- * - Google Cloud Storage
- * - Azure Blob Storage
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [30.11.2024]
+ * Responsibilities:
+ * - Upload a single statistics file to cloud storage.
+ * - Upload multiple statistics files to cloud storage.
+ * - Handle exceptions related to cloud storage operations, such as configuration
+ *   issues, file access problems, or upload failures.
  */
 public interface ICloudStorageService {
 

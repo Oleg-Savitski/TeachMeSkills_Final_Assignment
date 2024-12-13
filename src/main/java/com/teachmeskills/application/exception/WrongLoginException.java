@@ -1,40 +1,23 @@
 package com.teachmeskills.application.exception;
 /**
- * Specialized exception for login-related authentication failures in the application.
+ * Exception indicating errors related to invalid login credentials or login attempts.
 
  * Core Responsibilities:
- * - Represent login authentication errors
- * - Provide detailed error information about login failures
- * - Standardize login error handling
+ * - Represent specific issues encountered during user login processes.
+ * - Provide meaningful error messages to indicate the reason for a failed login attempt.
 
  * Key Features:
- * - Extends AppException for consistent error handling
- * - Supports custom error messages
- * - Used for tracking and managing login-related issues
+ * - Ability to define custom error messages when a login error occurs.
+ * - Extends the base functionality from the {@code AppException} class.
 
- * Common Scenarios:
- * - Incorrect username
- * - Invalid password
- * - Account locked or disabled
+ * Usage Notes:
+ * - This exception should be thrown when a login attempt fails due to invalid credentials
+ *   or other authentication-related issues.
+ * - Helps in identifying and handling authentication failures in a standardized manner within the application.
 
  * Design Patterns:
- * - Custom exception for specific authentication failures
- * - Extensible error reporting
-
- * Example Usage:
- * <pre>
- * try {
- *     authenticateUser(username, password);
- * } catch (WrongLoginException e) {
- *     // Handle login failure
- *     logLoginAttempt(username, false);
- *     displayErrorMessage(e.getMessage());
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [30.11.2024]
+ * - Leverages the custom exception hierarchy by extending {@code AppException} to provide
+ *   application-specific exceptions.
  */
 public class WrongLoginException extends AppException {
 

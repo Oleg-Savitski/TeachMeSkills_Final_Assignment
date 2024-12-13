@@ -1,48 +1,33 @@
 package com.teachmeskills.application.exception;
 
 import java.util.HashMap;
-import java.util.Map;/**
- * Specialized exception for statistics export-related errors in the application.
+import java.util.Map;
+
+/**
+ * Exception class for handling errors encountered during the export of statistical data.
 
  * Core Responsibilities:
- * - Represent different types of statistics export failures
- * - Provide detailed error information
- * - Standardize statistics export error handling
+ * - Represent specific types of errors that occur while exporting statistics.
+ * - Provide meaningful error messages corresponding to each error type.
+ * - Enable improved error traceability by linking the root cause of the exception.
 
  * Key Features:
- * - Enumerated error types
- * - Predefined error messages
- * - Comprehensive statistics export error categories
+ * - Enumerates predefined error types to classify common export issues.
+ * - Associates each error type with a specific error message for consistency.
+ * - Supports the inclusion of a nested throwable cause for error chaining.
 
  * Error Types:
- * - FILE_NOT_FOUND: Required export file cannot be located
- * - IO_ERROR: Input/Output issues during export process
- * - INVALID_DATA: Export data is invalid or cannot be processed
+ * - FILE_NOT_FOUND: Indicates that the specified file for exporting was not found.
+ * - IO_ERROR: Signals an input/output operation failure during the export process.
+ * - INVALID_DATA: Denotes that the data provided for export is invalid or incompatible.
 
  * Design Patterns:
- * - Error type enumeration
- * - Predefined error message mapping
- * - Extensible exception handling
+ * - Utilizes an enum to organize and structure error types.
+ * - Extends the AppException class to ensure consistent handling across related exceptions.
 
- * Example Usage:
- * <pre>
- * try {
- *     exportStatistics();
- * } catch (StatisticsExportException e) {
- *     switch (e.getType()) {
- *         case FILE_NOT_FOUND:
- *             // Handle missing export file
- *             break;
- *         case INVALID_DATA:
- *             // Handle data validation error
- *             break;
- *     }
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [01.12.2024]
+ * Usage Notes:
+ * - Designed for use in scenarios where statistics-related export operations fail.
+ * - Facilitates debugging and error resolution by offering targeted error classification.
  */
 public class StatisticsExportException extends AppException {
     public enum Type {

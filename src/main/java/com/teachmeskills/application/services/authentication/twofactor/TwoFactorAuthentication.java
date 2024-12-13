@@ -15,59 +15,33 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 /**
- * Utility class for implementing Two-Factor Authentication (2FA) functionality.
+ * The TwoFactorAuthentication class provides methods to implement
+ * two-factor authentication using TOTP (Time-based One-Time Passwords).
+ * It allows generating secret keys, creating TOTP codes, generating
+ * Google Authenticator-compatible barcodes, and creating QR codes.
+
+ * Core Responsibilities:
+ * - Generate secret keys for TOTP-based authentication.
+ * - Generate time-based OTP codes based on a secret key.
+ * - Create barcodes compatible with Google Authenticator for user account integration.
+ * - Generate QR codes for visual representation of the barcode data.
 
  * Key Features:
- * - Secret key generation
- * - Time-based One-Time Password (TOTP) code generation
- * - QR code creation for Google Authenticator
+ * - Secure random generation of secret keys.
+ * - TOTP-based authentication mechanism.
+ * - Barcode compatibility with Google Authenticator.
+ * - QR code generation for enhanced user experience.
 
- * Supported Authentication Methods:
- * - TOTP algorithm implementation
- * - Google Authenticator compatibility
-
- * Main Functionalities:
- * - Generate secure secret keys
- * - Create TOTP codes
- * - Generate QR codes for easy 2FA setup
-
- * Security Characteristics:
- * - Cryptographically secure random key generation
- * - Base32 encoding for secret keys
- * - URL-safe encoding for authentication URIs
+ * Methods:
+ * - generateSecretKey: Creates a random secret key for use in TOTP.
+ * - getTOTPCode: Generates a TOTP code using a given secret key.
+ * - getGoogleAuthenticatorBarCode: Builds a Google Authenticator-compatible barcode URL.
+ * - createQRCode: Generates a QR code from barcode data and saves it as an image file.
 
  * Use Cases:
- * - Two-factor authentication implementation
- * - Secure user verification
- * - Multi-factor authentication setup
-
- * Example Usage:
- * <pre>
- * // Generate a secret key
- * String secretKey = TwoFactorAuthentication.generateSecretKey();
- *
- * // Get current TOTP code
- * String totpCode = TwoFactorAuthentication.getTOTPCode(secretKey);
- *
- * // Create QR code for Google Authenticator
- * String barCode = TwoFactorAuthentication.getGoogleAuthenticatorBarCode(
- *     secretKey, "user@example.com", "MyApp"
- * );
- * TwoFactorAuthentication.createQRCode(barCode, "qrcode.png", 300, 300);
- * </pre>
- *
- * Dependencies:
- * - Google ZXing for QR code generation
- * - Apache Commons Codec
- * - TOTP library
-
- * Error Handling:
- * - Throws IllegalStateException for encoding errors
- * - Throws WriterException for QR code generation issues
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [28.11.2024]
+ * - Enabling two-factor authentication for user accounts.
+ * - Integrating with Google Authenticator or other TOTP-compatible apps.
+ * - Providing secure and visually accessible QR codes for authentication setup.
  */
 public class TwoFactorAuthentication {
 

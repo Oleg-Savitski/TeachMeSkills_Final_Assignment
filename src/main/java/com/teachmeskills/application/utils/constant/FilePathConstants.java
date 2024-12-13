@@ -2,51 +2,37 @@ package com.teachmeskills.application.utils.constant;
 
 import java.io.File;
 /**
- * Centralized constants interface for file paths in the application.
+ * Centralized interface for file path constants used in the application.
 
- * Provides standardized file and directory paths for:
- * - Statistical reports
- * - QR Code generation
- * - Logging
- * - Configuration files
+ * Provides a collection of predefined file and directory paths for managing various resources,
+ * such as configuration files, logs, QR codes, and statistical data.
 
  * Key Features:
- * - Absolute file paths for different application resources
- * - Consistent path management across the application
- * - Uses platform-independent {@link File#separator} for log files
+ * - Absolute paths to commonly used files and directories.
+ * - Centralized management of file path definitions for consistency.
+ * - Derived constants for paths dependent on directory structure.
 
- * Path Categories:
- * - {@link #AMOUNT_STATS_FILE_NAME}: Total amount statistics file
- * - {@link #INVALID_STATS_FILE_NAME}: Invalid files report
- * - {@link #QR_CODE_DIR}: QR Code generation directory
- * - {@link #LOG_DIR}: Logging directory
- * - {@link #CONFIG_DIR}: Configuration directory
+ * File and Directory Path Constants:
+ * - `AMOUNT_STATS_FILE_NAME`: Path to store total amount statistics.
+ * - `INVALID_STATS_FILE_NAME`: Path for invalid files report.
+ * - `QR_CODE_DIR`: Directory containing QR code files.
+ * - `LOG_DIR`: Directory for storing various log files.
+ * - `CONFIG_DIR`: Directory for configuration resources.
+ * - `CONFIG_FILE`: Path to the main configuration properties file.
+ * - `QR_CODE_PATH`: Path to the QR code image file.
+ * - `INFO_LOG_PATH`: Path to the info-level log file.
+ * - `ERROR_LOG_PATH`: Path to the error-level log file.
+ * - `WARNING_LOG_PATH`: Path to the warning-level log file.
 
- * Usage Examples:
- * <pre>
- * // Writing to statistics file
- * try (FileWriter writer = new FileWriter(FilePathConstants.AMOUNT_STATS_FILE_NAME)) {
- *     writer.write(statisticsData);
- * }
- *
- * // Logging
- * Logger.log(FilePathConstants.INFO_LOG_PATH, "Application started");
- * </pre>
- *
  * Recommendations:
- * - Consider using relative paths or configuration-driven paths
- * - Implement path resolution mechanism for different environments
+ * - Replace hardcoded file paths with configurable paths using external configuration.
+ * - Ensure paths are accessible and permissions are correctly set for read/write operations.
+ * - Regularly validate file and directory structures during deployment.
 
  * Potential Improvements:
- * - Support for environment-specific path configuration
- * - Dynamic path generation
-
- * Warning:
- * - Hardcoded absolute paths may cause issues in different deployment environments
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [19.11.2024]
+ * - Dynamically resolve paths relative to the project's root folder to enhance portability.
+ * - Use environment variables or configuration files to define paths for better flexibility.
+ * - Add constants for additional directories or files as needed.
  */
 public interface FilePathConstants {
 

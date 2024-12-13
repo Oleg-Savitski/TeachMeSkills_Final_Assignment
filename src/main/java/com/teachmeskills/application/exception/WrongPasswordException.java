@@ -1,40 +1,24 @@
 package com.teachmeskills.application.exception;
 /**
- * Specialized exception for password-related authentication failures in the application.
+ * Exception indicating errors related to incorrect password input or validation failures.
 
  * Core Responsibilities:
- * - Represent password authentication errors
- * - Provide detailed error information about password validation failures
- * - Standardize password-related error handling
+ * - Represent issues encountered during password authentication or validation.
+ * - Provide a descriptive error message to indicate the reason for the error.
 
  * Key Features:
- * - Extends AppException for consistent error management
- * - Supports custom error messages
- * - Used for tracking and managing password-related issues
+ * - Extends the base functionality from the {@code AppException} class.
+ * - Allows for customizable error messages to specify details regarding the incorrect password.
 
- * Common Scenarios:
- * - Incorrect password entry
- * - Password does not meet complexity requirements
- * - Password expired or requires reset
+ * Usage Notes:
+ * - This exception should be thrown in scenarios where a password does not meet
+ *   required validation criteria or fails during authentication.
+ * - Facilitates consistent error handling and identification of password-related issues
+ *   across the application.
 
  * Design Patterns:
- * - Custom exception for specific password authentication failures
- * - Extensible error reporting
-
- * Example Usage:
- * <pre>
- * try {
- *     validatePassword(password);
- * } catch (WrongPasswordException e) {
- *     // Handle password validation failure
- *     logPasswordAttempt(username, false);
- *     displayErrorMessage(e.getMessage());
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [30.12.2024]
+ * - Leverages the custom exception hierarchy by extending {@code AppException} to ensure
+ *   a well-structured and maintainable approach to exception handling.
  */
 public class WrongPasswordException extends AppException {
 

@@ -18,68 +18,23 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 /**
- * Advanced file analysis service for processing financial documents with comprehensive validation and error handling.
+ * The FileAnalyzer class implements the IFileAnalyzer interface, providing functionality to analyze and validate
+ * the contents of text files. It supports processing lines in the file that meet specific patterns related to
+ * orders, invoices, and checks. Each matched line is validated and processed according to predefined regex patterns.
+ * The results are recorded using a provided StatsService.
 
- * Key Features:
- * - Robust file content parsing
- * - Multiple document type support (Check, Invoice, Order)
- * - Detailed error logging
- * - Statistical data collection
+ * This class handles the following scenarios:
+ * - Validation of file content based on specific patterns.
+ * - Processing of lines that represent checks, invoices, or orders, and recording them in the associated statistics service.
+ * - Validation and handling of file-related constraints such as size limits and readability.
 
- * Supported Document Types:
- * - Checks
- * - Invoices
- * - Orders
+ * It uses an internal static class, PatternCache, to compile and reuse the regex patterns for matching lines of the
+ * file, improving performance.
 
- * Main Functionalities:
- * - File content validation
- * - Line-by-line document processing
- * - Automatic amount extraction
- * - Statistical record keeping
-
- * Processing Capabilities:
- * - Regex-based pattern matching
- * - Amount conversion
- * - Error-tolerant parsing
-
- * Performance Characteristics:
- * - Buffered file reading
- * - UTF-8 encoding support
- * - Configurable file size limits
-
- * Example Usage:
- * <pre>
- * StatsService statsService = new StatsService();
- * ILogger logger = new LoggerImpl();
- *
- * FileAnalyzer analyzer = new FileAnalyzer(statsService, logger);
- * File documentFile = new File("financial_data.txt");
- *
- * try {
- *     // Validate file content
- *     boolean isValid = analyzer.checkFileContentValidity(documentFile);
- *
- *     // Perform comprehensive analysis
- *     if (isValid) {
- *         analyzer.performFileAnalysis(documentFile);
- *     }
- * } catch (FileAnalyzerException e) {
- *     // Handle analysis errors
- * }
- * </pre>
- *
- * Error Handling:
- * - Comprehensive exception types
- * - Detailed error logging
- * - Graceful error recovery
-
- * Dependencies:
- * - StatsService for statistical tracking
- * - ILogger for logging operations
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [26.11.2024]
+ * Key features:
+ * - Validating file format and line patterns using regex.
+ * - Logging each action or error using the provided ILogger instance.
+ * - Properly handling invalid data formats and input/output exceptions by throwing FileAnalyzerException with appropriate types.
  */
 public class FileAnalyzer implements IFileAnalyzer {
 

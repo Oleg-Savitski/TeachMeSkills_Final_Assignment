@@ -3,51 +3,35 @@ package com.teachmeskills.application.exception;
 import java.util.HashMap;
 import java.util.Map;
 /**
- * Specialized exception for file analysis-related errors in the application.
+ * Exception representing file analysis errors in the application.
 
  * Core Responsibilities:
- * - Represent different types of file analysis failures
- * - Provide detailed error information
- * - Standardize file processing error handling
+ * - Encapsulates specific issues encountered during file processing.
+ * - Provides descriptive error messages for various file-related issues.
+ * - Standardizes error handling for file analysis operations.
 
  * Key Features:
- * - Enumerated error types
- * - Predefined error messages
- * - Comprehensive file-related error categories
+ * - Enumerated error types to classify file analysis errors.
+ * - Predefined error messages associated with specific error conditions.
+ * - Facilitates clear and consistent error reporting.
 
  * Error Types:
- * - FILE_TOO_LARGE: File size exceeds maximum limit
- * - FILE_NOT_READABLE: Unable to read file contents
- * - NO_VALID_LINES: No processable data in the file
- * - IO_ERROR: Input/Output related issues
- * - INVALID_CHECK_AMOUNT: Incorrect receipt amount format
- * - INVALID_INVOICE_AMOUNT: Incorrect invoice amount format
- * - INVALID_ORDER_AMOUNT: Incorrect order amount format
+ * - FILE_TOO_LARGE: The file size exceeds the permitted limit.
+ * - FILE_NOT_READABLE: The file cannot be read due to permissions or other issues.
+ * - NO_VALID_LINES: The file does not contain any lines that meet the validity criteria.
+ * - IO_ERROR: An input/output operation error while working with the file.
+ * - INVALID_CHECK_AMOUNT: The receipt amount format is incorrect.
+ * - INVALID_INVOICE_AMOUNT: The invoice amount format is invalid.
+ * - INVALID_ORDER_AMOUNT: The order amount format is invalid.
 
  * Design Patterns:
- * - Error type enumeration
- * - Predefined error message mapping
- * - Extensible exception handling
+ * - Utilizes an enum to define and categorize error types.
+ * - Simplifies exception handling by associating error types with specific messages.
 
- * Example Usage:
- * <pre>
- * try {
- *     analyzeFile(file);
- * } catch (FileAnalyzerException e) {
- *     switch (e.getType()) {
- *         case FILE_TOO_LARGE:
- *             // Handle file size exceeded
- *             break;
- *         case NO_VALID_LINES:
- *             // Handle empty or invalid file
- *             break;
- *     }
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [03.12.2024]
+ * Usage Notes:
+ * - This exception is designed for file processing operations where specific errors
+ *   need to be identified and handled with clear messages.
+ * - Provides detailed error descriptions to help with debugging and error handling.
  */
 public class FileAnalyzerException extends Exception {
 

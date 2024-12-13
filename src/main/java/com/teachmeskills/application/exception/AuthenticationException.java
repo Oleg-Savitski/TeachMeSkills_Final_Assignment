@@ -6,44 +6,25 @@ import java.util.Map;
  * Specialized exception for authentication-related errors in the application.
 
  * Core Responsibilities:
- * - Represent different types of authentication failures
- * - Provide detailed error information
- * - Standardize authentication error handling
+ * - Represent various authentication failure scenarios
+ * - Provide clear and predefined error messages for different error types
+ * - Facilitate error categorization using an enumerated type
+ * - Support causal tracking to indicate underlying issues
 
  * Key Features:
- * - Enumerated error types
- * - Predefined error messages
- * - Support for root cause tracking
+ * - Defines multiple types of authentication errors using an enum `Type`
+ * - Maps predefined error messages to each error type for consistent error descriptions
+ * - Extends the base `AppException` to ensure standardized exception handling
 
  * Error Types:
- * - INVALID_CREDENTIALS: Incorrect login or password
- * - DECRYPTION_ERROR: Issues with credential decryption
- * - AUTHENTICATION_FAILED: General authentication failure
+ * - INVALID_CREDENTIALS: Indicates that the provided credentials are incorrect
+ * - DECRYPTION_ERROR: Represents issues in decrypting authentication data
+ * - AUTHENTICATION_FAILED: A general failure in verifying authentication
+ * - SESSION_CREATION_ERROR: Unexpected issues during session creation
 
- * Design Patterns:
- * - Error type enumeration
- * - Predefined error message mapping
- * - Extensible exception handling
-
- * Example Usage:
- * <pre>
- * try {
- *     authenticateUser();
- * } catch (AuthenticationException e) {
- *     switch (e.getType()) {
- *         case INVALID_CREDENTIALS:
- *             // Handle invalid credentials
- *             break;
- *         case DECRYPTION_ERROR:
- *             // Handle decryption issues
- *             break;
- *     }
- * }
- * </pre>
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [01.12.2024]
+ * Design Considerations:
+ * - Each error type is associated with a descriptive message to simplify error tracking
+ * - Provides constructors to define exceptions with or without a root cause
  */
 public class AuthenticationException extends AppException {
   public enum Type {

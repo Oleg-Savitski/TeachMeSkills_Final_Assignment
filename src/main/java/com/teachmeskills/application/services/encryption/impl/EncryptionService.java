@@ -9,51 +9,31 @@ import java.util.Base64;
 
 import static com.teachmeskills.application.utils.config.ConfigurationLoader.SALT_LENGTH;
 /**
- * Implementation of encryption and decryption service with Base64 encoding and salt generation.
+ * A service class implementing the IEncryption interface to provide encryption and decryption
+ * functionalities using Base64 encoding and cryptographic salting.
+ * It supports secure data processing by adding salt during encryption and extracting it during decryption.
 
- * Key Characteristics:
- * - Base64-based encoding/decoding mechanism
- * - Salt-enhanced encryption process
- * - Secure data transformation
- * - Detailed logging support
+ * Responsibilities:
+ * - Encrypt a given input string by Base64 encoding and appending a randomly generated salt.
+ * - Decrypt an encrypted string by removing the salt and decoding the Base64 content.
+ * - Handle decryption errors with appropriate logging and exception throwing.
 
- * Core Capabilities:
- * - Encrypt input strings
- * - Decrypt salted Base64-encoded strings
- * - Generate cryptographic salts
- * - Provide detailed encryption/decryption logs
+ * Dependencies:
+ * - SecureRandomSaltGenerator: Responsible for generating cryptographic salts.
+ * - ILogger: Used for logging messages, including errors and warnings.
 
- * Usage Scenarios:
- * - Secure data storage
- * - Confidential information protection
- * - Logging encryption processes
-
- * Security Considerations:
- * - Uses Base64 encoding
- * - Adds cryptographic salt
- * - Handles potential decryption errors
- * - Prevents decoding of invalid inputs
-
- * Usage Examples:
- * <pre>
- * ILogger logger = new LoggerImpl();
- * EncryptionService encryptor = new EncryptionService(logger);
- * String encrypted = encryptor.encrypt("sensitive_data");
- * String decrypted = encryptor.decrypt(encrypted);
- * </pre>
- *
  * Error Handling:
- * - Throws EncryptionException for decryption failures
- * - Logs detailed error information
+ * - Throws EncryptionException for invalid inputs or decryption failures.
+ * - Logs error messages using the ILogger instance when exceptions occur.
 
- * Implementation Details:
- * - Utilizes SecureRandomSaltGenerator
- * - Supports configurable salt length
- * - Provides colorful console logging
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [17.11.2024]
+ * Design Notes:
+ * - Relies on constants for console log formatting with colors.
+ * - Implements the IEncryption interface, ensuring contract compliance for encryption and decryption methods.
+ * - Uses secure processes for salt generation to enhance encryption security.
+
+ * Key Methods:
+ * - encrypt(String input): Encrypts a given input string and returns the salted, encoded output.
+ * - decrypt(String input): Decrypts a previously encrypted string, removing the salt and decoding the material.
  */
 public class EncryptionService implements IEncryption {
 

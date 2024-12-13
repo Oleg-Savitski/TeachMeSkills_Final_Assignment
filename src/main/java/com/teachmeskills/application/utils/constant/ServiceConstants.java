@@ -5,47 +5,32 @@ import com.teachmeskills.application.services.encryption.impl.EncryptionService;
 import com.teachmeskills.application.services.logger.ILogger;
 import com.teachmeskills.application.services.logger.impl.LoggerService;
 /**
- * Centralized interface for singleton service instances in the application.
+ * Interface containing constants for core service components.
 
- * Provides standardized, pre-configured service implementations for:
- * - Logging
- * - Encryption
+ * ServiceConstants acts as a container for commonly used service instances,
+ * ensuring that all application modules use the same global configurations
+ * and instances of services. This avoids redundant instantiations and promotes
+ * consistent behavior across the application.
 
- * Key Features:
- * - Centralized service initialization
- * - Consistent service configuration
- * - Singleton-like service access
+ * Key Components:
+ * - ILogger: Provides logging functionality for application runtime information.
+ * - IEncryption: Handles encryption-related operations for security and data protection.
 
- * Services:
- * - {@link #I_LOGGER}: Centralized logging service
- * - {@link #I_ENCRYPTION_SERVICE}: Application-wide encryption service
+ * ILogger:
+ * - Responsible for logging application information, warnings, and error messages.
+ * - Enhances debugging and traceability through consistent and structured logging.
 
- * Design Patterns:
- * - Utilizes dependency injection principles
- * - Provides interface-based service definitions
+ * LoggerService:
+ * - Implements ILogger to provide logging capabilities with formatted messages.
+ * - Supports asynchronous and multi-threaded environments for efficient logging.
 
- * Usage Examples:
- * <pre>
- * // Logging
- * ServiceConstants.I_LOGGER.info("Application started");
- *
- * // Encryption
- * String encryptedData = ServiceConstants.I_ENCRYPTION_SERVICE.encrypt(sensitiveData);
- * </pre>
- *
- * Recommendations:
- * - Consider using dependency injection frameworks
- * - Implement lazy initialization for services
- * - Support for service configuration and customization
+ * IEncryption:
+ * - Provides functionality for encryption and decryption of data.
+ * - Enables secure operations such as handling sensitive user information.
 
- * Potential Improvements:
- * - Add more service initializations
- * - Support for dynamic service configuration
- * - Implement service lifecycle management
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [23.11.2024]
+ * EncryptionService:
+ * - Implements IEncryption and uses ILogger for logging purposes.
+ * - Ensures secure data processing with error logging support.
  */
 
 public interface ServiceConstants {

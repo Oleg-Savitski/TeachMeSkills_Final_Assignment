@@ -2,42 +2,17 @@ package com.teachmeskills.application.services.encryption;
 
 import com.teachmeskills.application.exception.EncryptionException;
 /**
- * Interface for cryptographic encryption and decryption operations.
+ * This interface defines methods for encrypting and decrypting data.
+ * It serves as a contract for implementing encryption and decryption logic.
 
- * Key Characteristics:
- * - Abstraction of encryption mechanisms
- * - Support for reversible encryption
- * - Secure data transformation
+ * Core responsibilities:
+ * - Provide a method for encrypting input strings.
+ * - Provide a method for decrypting previously encrypted strings,
+ *   with error handling for decryption failures.
 
- * Core Capabilities:
- * - Encryption of input string
- * - Decryption of encrypted string
-
- * Usage Scenarios:
- * - Protection of confidential data
- * - Secure information storage
- * - Secure data transmission
-
- * Security Requirements:
- * - Encryption irreversibility
- * - Resistance to cryptanalysis
- * - Minimization of information leaks
-
- * Usage Examples:
- * <pre>
- * IEncryption encryptor = new AESEncryption();
- * String encrypted = encryptor.encrypt("sensitive_data");
- * String decrypted = encryptor.decrypt(encrypted);
- * </pre>
- *
- * Potential Implementations:
- * - Symmetric encryption (AES)
- * - Asymmetric encryption (RSA)
- * - Salted hashing
- *
- * @author [Oleg Savitski]
- * @version 1.0
- * @since [29.11.2024]
+ * Key Features:
+ * - Abstraction for various encryption implementations.
+ * - Simplified API for integrating encryption functionality in applications.
  */
 public interface IEncryption {
 
